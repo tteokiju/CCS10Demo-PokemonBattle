@@ -3,166 +3,170 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pocket Pals Battle</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<title>Pocket Pals Retro Battle Arena</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --pink: #ffd6e8;
-    --pink-deep: #ff8fb8;
-    --cream: #fff8ee;
-    --mint: #c9f2e3;
-    --lav: #e3d9ff;
-    --sky: #cfeaff;
-    --butter: #fff2b8;
-    --ink: #5b4a6b;
-    --shadow: 0 6px 0 rgba(91, 74, 107, 0.15);
+    --bg-dark: #12121c;
+    --panel-bg: #f8f8f8;
+    --border-retro: #2b2b2b;
+    --accent-blue: #3b4cca;
+    --accent-yellow: #ffde00;
+    --accent-red: #cc0000;
+    --accent-green: #388e3c;
+    --shadow: 4px 4px 0px #000;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    font-family: "Nunito", "Quicksand", "Trebuchet MS", system-ui, sans-serif;
-    font-weight: 600;
-    color: var(--ink);
-    background: linear-gradient(160deg, var(--pink) 0%, var(--lav) 50%, var(--sky) 100%);
+    font-family: "Nunito", sans-serif;
+    font-weight: 700;
+    color: #2b2b2b;
+    background: linear-gradient(135deg, #2b32b2 0%, #1488cc 100%);
     background-attachment: fixed;
     min-height: 100vh;
+    padding: 15px;
   }
   .hidden { display: none !important; }
 
   header.top {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 22px; gap: 12px; flex-wrap: wrap;
+    padding: 10px 20px; max-width: 1240px; margin: 0 auto 15px; background: #fff;
+    border: 4px solid var(--border-retro); border-radius: 12px; box-shadow: var(--shadow);
   }
-  header.top h1 { margin: 0; font-size: 1.7rem; font-weight: 800; letter-spacing: 0.5px; }
-  .trainer-tag { font-size: 0.95rem; background: white; padding: 6px 14px; border-radius: 99px; box-shadow: var(--shadow); }
+  header.top h1 { margin: 0; font-size: 1.2rem; font-family: 'Press Start 2P', monospace; color: var(--accent-blue); }
+  .trainer-tag { font-size: 0.9rem; background: var(--accent-yellow); padding: 6px 12px; border: 2px solid var(--border-retro); border-radius: 8px; }
 
   .btn {
-    font-family: inherit; font-weight: 800; font-size: 1rem; color: var(--ink);
-    background: var(--butter); border: 3px solid var(--ink); border-radius: 16px;
-    padding: 8px 16px; cursor: pointer; box-shadow: var(--shadow);
-    transition: transform 0.12s, box-shadow 0.12s;
+    font-family: 'Press Start 2P', monospace; font-size: 0.75rem; color: #fff;
+    background: var(--accent-blue); border: 3px solid var(--border-retro); border-radius: 8px;
+    padding: 10px 14px; cursor: pointer; box-shadow: var(--shadow);
+    transition: transform 0.1s, background 0.1s;
   }
-  .btn:hover:not(:disabled) { transform: translateY(-2px); }
-  .btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 rgba(91,74,107,.15); }
+  .btn:hover:not(:disabled) { background: #2a36b1; transform: translateY(-2px); }
+  .btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 2px 2px 0px #000; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .app { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 18px; padding: 0 22px 28px; max-width: 1280px; margin: 0 auto; }
+  .app { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 15px; max-width: 1240px; margin: 0 auto; }
   @media (max-width: 960px) { .app { grid-template-columns: 1fr; } }
 
   .card {
-    background: var(--cream); border: 3px solid var(--ink); border-radius: 26px;
-    padding: 18px; box-shadow: var(--shadow); margin-bottom: 16px;
+    background: var(--panel-bg); border: 4px solid var(--border-retro); border-radius: 16px;
+    padding: 20px; box-shadow: var(--shadow); margin-bottom: 15px;
   }
-  .card h2, .card h3 { margin: 0 0 10px; }
+  .card h2, .card h3 { margin: 0 0 12px; font-family: 'Press Start 2P', monospace; font-size: 0.95rem; color: #333; }
 
   /* ---------- start screen ---------- */
-  #startScreen { text-align: center; max-width: 460px; margin: 20px auto; }
-  #startScreen .hero { font-size: 4rem; animation: bob 2s ease-in-out infinite; }
-  #startScreen label { display: block; text-align: left; margin: 12px 0 4px; font-weight: 800; }
+  #startScreen { text-align: center; max-width: 480px; margin: 40px auto; }
+  #startScreen .hero { font-size: 3.5rem; margin-bottom: 10px; animation: bounce 1.5s infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  #startScreen label { display: block; text-align: left; margin: 12px 0 4px; font-size: 0.9rem; }
   #startScreen input {
-    width: 100%; padding: 10px 14px; font: inherit; border: 3px solid var(--ink);
-    border-radius: 14px; background: white; color: var(--ink);
+    width: 100%; padding: 10px; font: inherit; border: 3px solid var(--border-retro);
+    border-radius: 8px; background: #fff;
   }
-  #startScreen input:focus { outline: 3px solid var(--pink-deep); }
-  .error { min-height: 1.4em; color: #d6336c; font-weight: 800; margin: 10px 0 4px; }
+  .error { min-height: 1.4em; color: var(--accent-red); font-size: 0.85rem; margin: 8px 0; font-weight: 800; }
 
-  /* ---------- battle scene ---------- */
+  /* ---------- select screen ---------- */
+  #selectScreen { text-align: center; max-width: 580px; margin: 20px auto; }
+  .poke-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 16px 0; }
+  .poke-option {
+    background: #fff; border: 3px solid var(--border-retro); border-radius: 12px; padding: 12px;
+    cursor: pointer; box-shadow: var(--shadow); transition: transform 0.1s, background 0.1s;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+  }
+  .poke-option:hover { transform: translateY(-3px); background: #e0f7fa; }
+  .poke-option.selected { border-color: var(--accent-blue); background: #b3e5fc; transform: translateY(-3px); }
+  .poke-option .poke-img { width: 72px; height: 72px; image-rendering: pixelated; }
+  .poke-option .poke-title { font-weight: 800; font-size: 0.9rem; }
+  .poke-option .poke-type { font-size: 0.75rem; background: #eee; padding: 2px 6px; border-radius: 4px; }
+
+  /* ---------- battle scene (Classic Retro Style) ---------- */
   .scene {
-    position: relative; height: 330px; border: 3px solid var(--ink); border-radius: 26px;
-    overflow: hidden; box-shadow: var(--shadow); margin-bottom: 16px;
-    background: linear-gradient(var(--sky) 0%, #f3fbff 55%, #bdeeb8 55%, #a6e3a1 100%);
+    position: relative; height: 320px; border: 4px solid var(--border-retro); border-radius: 16px;
+    overflow: hidden; box-shadow: var(--shadow); margin-bottom: 15px;
+    background: radial-gradient(circle, #e0f7fa 0%, #80deea 100%);
   }
-  .scene::before { content: "☁️"; position: absolute; top: 12px; left: 46%; font-size: 2rem; opacity: .8; animation: drift 9s ease-in-out infinite alternate; }
-  .scene::after  { content: "🌸"; position: absolute; bottom: 10px; left: 46%; font-size: 1.4rem; }
-  @keyframes drift { from { transform: translateX(-20px);} to { transform: translateX(30px);} }
 
-  .pal { position: absolute; text-align: center; }
-  .pal.enemy  { right: 12%; top: 14%; }
-  .pal.player { left: 12%; bottom: 6%; }
-  .pal .platform {
-    position: absolute; left: 50%; bottom: -6px; width: 130px; height: 28px;
-    transform: translateX(-50%); background: rgba(91,74,107,.18); border-radius: 50%; z-index: 0;
+  .pal { position: absolute; text-align: center; transition: all 0.2s; }
+  .pal.enemy  { right: 12%; top: 12%; }
+  .pal.player { left: 12%; bottom: 8%; }
+  
+  .platform {
+    position: absolute; left: 50%; bottom: -8px; width: 140px; height: 30px;
+    transform: translateX(-50%); background: #4db6ac; border: 3px solid var(--border-retro); border-radius: 50%; z-index: 0;
   }
-  .sprite {
-    position: relative; z-index: 1; font-size: 5.2rem; line-height: 1;
-    animation: bob 2.2s ease-in-out infinite; filter: drop-shadow(0 6px 4px rgba(0,0,0,.15));
+  .sprite-img {
+    position: relative; z-index: 1; width: 130px; height: 130px; image-rendering: pixelated;
+    filter: drop-shadow(0 4px 2px rgba(0,0,0,0.2));
   }
-  .pal.player .sprite { transform: scaleX(-1); animation: bobFlip 2.2s ease-in-out infinite; }
-  @keyframes bob { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-8px);} }
-  @keyframes bobFlip { 0%,100% { transform: scaleX(-1) translateY(0);} 50% { transform: scaleX(-1) translateY(-8px);} }
-  .sprite.hit { animation: hit 0.4s ease; }
-  .pal.player .sprite.hit { animation: hitFlip 0.4s ease; }
-  @keyframes hit { 0%,100% { transform: translateX(0); filter: brightness(1);} 25% { transform: translateX(-14px); filter: brightness(2);} 75% { transform: translateX(14px); filter: brightness(2);} }
-  @keyframes hitFlip { 0%,100% { transform: scaleX(-1) translateX(0); filter: brightness(1);} 25% { transform: scaleX(-1) translateX(-14px); filter: brightness(2);} 75% { transform: scaleX(-1) translateX(14px); filter: brightness(2);} }
-  .sprite.faint { animation: faint 1s forwards; }
-  .pal.player .sprite.faint { animation: faintFlip 1s forwards; }
-  @keyframes faint { to { transform: translateY(70px) rotate(25deg); opacity: 0; } }
-  @keyframes faintFlip { to { transform: scaleX(-1) translateY(70px) rotate(-25deg); opacity: 0; } }
+  .pal.player .sprite-img { transform: scaleX(-1); }
+
+  /* Visual Juice / Animations */
+  .sprite-img.hit { animation: hitFlash 0.4s steps(2, start); }
+  @keyframes hitFlash { 0% { opacity: 0; transform: scale(1.1); } 50% { opacity: 1; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+
+  .sprite-img.faint { animation: faintSink 1s forwards; }
+  @keyframes faintSink { to { transform: translateY(80px); opacity: 0; } }
 
   .infobox {
-    position: absolute; background: white; border: 3px solid var(--ink); border-radius: 18px;
-    padding: 8px 12px; min-width: 200px; box-shadow: var(--shadow); z-index: 2;
+    position: absolute; background: #fdfdfd; border: 3px solid var(--border-retro); border-radius: 10px;
+    padding: 8px 12px; min-width: 210px; box-shadow: 2px 2px 0px rgba(0,0,0,0.2); z-index: 2;
   }
-  .infobox.enemy-box  { left: 4%; top: 8%; }
-  .infobox.player-box { right: 4%; bottom: 8%; }
-  .infobox .name { font-weight: 800; display: flex; justify-content: space-between; gap: 8px; }
-  .infobox .team-dots { font-size: .9rem; margin-top: 4px; letter-spacing: 2px; }
-  .hp { height: 12px; background: #ece6f2; border-radius: 99px; overflow: hidden; margin: 6px 0 2px; border: 2px solid var(--ink); }
-  .bar { height: 100%; width: 100%; transition: width .5s ease, background .3s; border-radius: 99px; }
-  .bar.good { background: #6fdc8c; }
-  .bar.warn { background: #ffd54f; }
-  .bar.danger { background: #ff6b81; }
-  .hp-text { font-size: .8rem; text-align: right; }
+  .infobox.enemy-box  { left: 4%; top: 6%; }
+  .infobox.player-box { right: 4%; bottom: 6%; }
+  .infobox .name { font-weight: 800; font-size: 0.9rem; display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .infobox .team-dots { font-size: 0.8rem; margin-top: 4px; display: flex; gap: 4px; align-items: center; }
+  .team-thumb { width: 20px; height: 20px; image-rendering: pixelated; }
+  .hp { height: 10px; background: #ddd; border-radius: 5px; overflow: hidden; border: 2px solid var(--border-retro); margin: 4px 0; }
+  .bar { height: 100%; width: 100%; transition: width 0.4s ease, background 0.3s; }
+  .bar.good { background: var(--accent-green); }
+  .bar.warn { background: #ffa000; }
+  .bar.danger { background: var(--accent-red); }
+  .hp-text { font-size: 0.75rem; text-align: right; font-family: 'Press Start 2P', monospace; }
 
   /* ---------- action panel ---------- */
-  #info { min-height: 2.6em; background: white; border: 3px dashed var(--pink-deep); border-radius: 14px; padding: 8px 12px; margin-bottom: 12px; }
-  #moves { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-  #moves button { padding: 12px 8px; }
-  .type-fire { background: #ffd0c2 !important; }
-  .type-water { background: #c7e4ff !important; }
-  .type-grass { background: #cdf3c4 !important; }
-  .type-electric { background: #fff0a8 !important; }
-  .type-ice { background: #d9f6ff !important; }
-  .type-normal { background: #eee6f5 !important; }
+  #info { 
+    min-height: 2.8em; background: #222; color: #fff; font-family: 'Press Start 2P', monospace; 
+    font-size: 0.75rem; line-height: 1.5; border: 3px solid var(--border-retro); border-radius: 10px; padding: 12px; margin-bottom: 12px; 
+  }
+  #moves { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+  #moves button { padding: 12px 8px; font-size: 0.7rem; }
+  .type-fire { background: #ff7043 !important; color: #fff; }
+  .type-water { background: #29b6f6 !important; color: #fff; }
+  .type-grass { background: #66bb6a !important; color: #fff; }
+  .type-electric { background: #ffee58 !important; color: #333; }
+  .type-ice { background: #26c6da !important; color: #fff; }
+  .type-normal { background: #bdbdbd !important; color: #333; }
 
-  #log { list-style: none; margin: 0; padding: 0; max-height: 180px; overflow-y: auto; }
-  #log li { padding: 6px 10px; border-radius: 12px; margin-bottom: 6px; background: white; animation: pop .25s ease; }
-  #log li:nth-child(even) { background: var(--lav); }
-  @keyframes pop { from { transform: scale(.9); opacity: 0;} to { transform: scale(1); opacity: 1;} }
+  #log { list-style: none; margin: 0; padding: 0; max-height: 140px; overflow-y: auto; font-size: 0.85rem; }
+  #log li { padding: 6px 10px; border-bottom: 1px dashed #ddd; margin-bottom: 4px; }
 
   /* ---------- code peek ---------- */
-  #peek { position: sticky; top: 14px; align-self: start; background: #2f2640; color: #f4eefc; border: 3px solid var(--ink); border-radius: 26px; padding: 16px; box-shadow: var(--shadow); max-height: calc(100vh - 28px); overflow-y: auto; }
+  #peek { background: #1e1e2f; color: #f4eefc; border: 4px solid var(--border-retro); border-radius: 16px; padding: 16px; box-shadow: var(--shadow); max-height: calc(100vh - 40px); overflow-y: auto; }
   @media (max-width: 960px) { #peek { position: static; max-height: none; } }
-  #peek h2 { margin: 0 0 8px; font-size: 1.15rem; color: var(--butter); }
-  #peekConcept { display: inline-block; background: var(--pink-deep); color: #3a2147; padding: 4px 12px; border-radius: 99px; font-weight: 800; margin-bottom: 8px; }
-  #peekNote { margin: 0 0 10px; color: #dcd0f0; font-size: .92rem; }
+  #peek h2 { margin: 0 0 8px; font-size: 0.9rem; font-family: 'Press Start 2P', monospace; color: var(--accent-yellow); }
+  #peekConcept { display: inline-block; background: var(--accent-yellow); color: #000; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.75rem; margin-bottom: 8px; }
+  #peekNote { margin: 0 0 10px; color: #dcd0f0; font-size: 0.85rem; }
   #peekCode {
-    margin: 0 0 12px; background: #1f1830; border-radius: 14px; padding: 12px; overflow-x: auto;
-    font-family: "Fira Code", Consolas, monospace; font-size: .8rem; line-height: 1.5; font-weight: 400; white-space: pre; color: #f4eefc;
+    margin: 0 0 12px; background: #111; border-radius: 8px; padding: 12px; overflow-x: auto;
+    font-family: monospace; font-size: 0.75rem; line-height: 1.4; color: #a6e3a1; white-space: pre;
   }
-  .tok-kw { color: #ff9ac6; } .tok-str { color: #a6e3a1; } .tok-num { color: #ffd54f; } .tok-com { color: #9a8fb0; font-style: italic; }
   #peekHistory { display: flex; flex-wrap: wrap; gap: 6px; }
-  #peekHistory button { font-family: inherit; font-weight: 800; font-size: .72rem; border: 2px solid #8b7aa8; background: #3b3150; color: #f4eefc; border-radius: 99px; padding: 3px 10px; cursor: pointer; }
-  #peekHistory button:hover { background: #55467a; }
-  .peek-sub { font-size: .75rem; color: #b8a9d4; margin: 6px 0; }
+  #peekHistory button { font-family: inherit; font-weight: 800; font-size: 0.65rem; border: 2px solid #555; background: #333; color: #fff; border-radius: 6px; padding: 4px 8px; cursor: pointer; }
+  #peekHistory button:hover { background: #555; }
+  .peek-sub { font-size: 0.75rem; color: #b8a9d4; margin: 6px 0; }
 
   /* ---------- overlay ---------- */
-  #overlay { position: fixed; inset: 0; background: rgba(91,74,107,.55); display: flex; align-items: center; justify-content: center; z-index: 10; }
-  #overlay .card { text-align: center; max-width: 380px; margin: 0; }
+  #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 10; }
+  #overlay .card { text-align: center; max-width: 380px; margin: 0; background: #fff; }
   #overlay .big { font-size: 4rem; }
-
-  @media (max-width: 600px) {
-    .scene { height: 300px; }
-    .sprite { font-size: 3.6rem; }
-    .infobox { min-width: 150px; font-size: .85rem; }
-    header.top h1 { font-size: 1.3rem; }
-  }
 </style>
 </head>
 <body>
 
 <header class="top">
-  <h1>✨ Pocket Pals Battle ✨</h1>
+  <h1>⚡ Pocket Pals Battle</h1>
   <div style="display:flex; gap:10px; align-items:center;">
     <span id="trainerTag" class="trainer-tag hidden"></span>
     <button id="peekToggle" class="btn">👀 Code Peek</button>
@@ -173,17 +177,25 @@
   <main>
     <!-- Start screen with form validation -->
     <section id="startScreen" class="card">
-      <div class="hero">🦊🐸🐱</div>
-      <h2>Welcome, Trainer!</h2>
-      <p>Sign in to start your battle.</p>
+      <div class="hero">🎮🔥</div>
+      <h2>Trainer Login</h2>
+      <p style="font-size: 0.85rem; color: #666;">Enter your credentials to start your journey.</p>
       <form id="trainerForm" novalidate>
         <label for="nameInput">Trainer name</label>
-        <input id="nameInput" type="text" placeholder="e.g. Mochi" autocomplete="off">
+        <input id="nameInput" type="text" placeholder="e.g. Ash" autocomplete="off">
         <label for="passInput">Secret password (8+ characters)</label>
         <input id="passInput" type="password" placeholder="••••••••">
         <p id="formError" class="error"></p>
-        <button class="btn" type="submit">Start battle! 🌟</button>
+        <button class="btn" type="submit" style="width: 100%;">Continue 🌟</button>
       </form>
+    </section>
+
+    <!-- Select screen -->
+    <section id="selectScreen" class="card hidden">
+      <h2>Choose Your Starter Pokémon!</h2>
+      <p style="font-size: 0.85rem; color: #666;">Select your primary combatant for battle:</p>
+      <div class="poke-grid" id="pokeGrid"></div>
+      <button id="confirmSelectBtn" class="btn" style="width: 100%; margin-top: 10px;">Start Battle! 🚀</button>
     </section>
 
     <!-- Battle screen -->
@@ -195,9 +207,9 @@
           <div class="hp-text" id="enemyHpText"></div>
           <div class="team-dots" id="enemyTeamDots"></div>
         </div>
-        <div class="pal enemy"><div class="sprite" id="enemySprite"></div><div class="platform"></div></div>
+        <div class="pal enemy"><img class="sprite-img" id="enemySprite" src="" alt="Enemy Sprite"><div class="platform"></div></div>
 
-        <div class="pal player"><div class="sprite" id="playerSprite"></div><div class="platform"></div></div>
+        <div class="pal player"><img class="sprite-img" id="playerSprite" src="" alt="Player Sprite"><div class="platform"></div></div>
         <div class="infobox player-box">
           <div class="name"><span id="playerName"></span></div>
           <div class="hp"><div id="playerBar" class="bar good"></div></div>
@@ -206,13 +218,12 @@
         </div>
       </div>
 
-      <div class="card">
-        <h3>What will you do? 🎀</h3>
-        <div id="info">Hover over a move to see what it does!</div>
+      <div class="card" style="padding: 14px;">
+        <div id="info">What will you do? Choose a move below!</div>
         <div id="moves"></div>
       </div>
 
-      <div class="card">
+      <div class="card" style="padding: 14px;">
         <h3>Battle log 📜</h3>
         <ul id="log"></ul>
       </div>
@@ -232,32 +243,94 @@
 
 <div id="overlay" class="hidden">
   <div class="card">
-    <div class="big" id="overlayEmoji"></div>
-    <h2 id="overlayText"></h2>
-    <button id="againBtn" class="btn">Play again 🔁</button>
+    <div class="big" id="overlayEmoji">🔥</div>
+    <h2 id="overlayText" style="margin: 10px 0; font-family:'Press Start 2P'; font-size:0.9rem;"></h2>
+    <button id="againBtn" class="btn" style="width:100%;">Play again 🔁</button>
   </div>
 </div>
 
 <script>
 /* =========================================================
-   POCKET PALS BATTLE
-   Uses only the JavaScript topics from our written report:
-   variables, data types, operators, conditionals, loops,
-   functions & scope, arrays, objects, DOM, events,
-   form validation, callbacks and setTimeout.
+   AUTHENTIC RETRO POCKET PALS BATTLE & SOUND SYNTHESIS
    ========================================================= */
 
-/* ---------- Variables & data types ---------- */
-let trainerName = "";        // String
-let turn = 1;                // Number
-let busy = false;            // Boolean
-let selectedMove = null;     // null = no move chosen yet
-const playerTeam = [];       // Array
-const enemyTeam = [];        // Array
-const battleLog = [];        // Array
-const peekHistory = [];      // Array
+// Web Audio API Sound Synthesizer
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-/* ---------- Objects: the type chart and our pals ---------- */
+function playSound(type) {
+  if (!audioCtx) return;
+  if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  const now = audioCtx.currentTime;
+
+  if (type === 'click') {
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(400, now);
+    osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+    gain.gain.setValueAtTime(0.1, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+    osc.start(now);
+    osc.stop(now + 0.05);
+  } else if (type === 'hit') {
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(150, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 0.15);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+    osc.start(now);
+    osc.stop(now + 0.15);
+  } else if (type === 'heal') {
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(300, now);
+    osc.frequency.setValueAtTime(450, now + 0.1);
+    osc.frequency.setValueAtTime(600, now + 0.2);
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+    osc.start(now);
+    osc.stop(now + 0.3);
+  } else if (type === 'victory') {
+    osc.type = 'triangle';
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    notes.forEach((freq, i) => {
+      let t = now + (i * 0.12);
+      let o = audioCtx.createOscillator();
+      let g = audioCtx.createGain();
+      o.type = 'triangle';
+      o.frequency.setValueAtTime(freq, t);
+      g.gain.setValueAtTime(0.15, t);
+      g.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
+      o.connect(g);
+      g.connect(audioCtx.destination);
+      o.start(t);
+      o.stop(t + 0.12);
+    });
+  } else if (type === 'faint') {
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(300, now);
+    osc.frequency.linearRampToValueAtTime(80, now + 0.4);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+    osc.start(now);
+    osc.stop(now + 0.4);
+  }
+}
+
+// Game State Variables
+let trainerName = "";        
+let turn = 1;                
+let busy = false;            
+let selectedMove = null;     
+let chosenStarterKey = "charmander"; 
+const playerTeam = [];       
+const enemyTeam = [];        
+const battleLog = [];        
+const peekHistory = [];      
+
 const typeChart = {
   fire:     { grass: 2, ice: 2, water: 0.5, fire: 0.5 },
   water:    { fire: 2, water: 0.5, grass: 0.5 },
@@ -269,128 +342,121 @@ const typeChart = {
 
 const typeEmoji = { fire: "🔥", water: "💧", grass: "🌿", electric: "⚡", ice: "❄️", normal: "⭐" };
 
+// Pokémon Data with Official Sprite PNG URLs (Using official PokeAPI pixel sprites)
 const pals = {
-  embrix: { name: "Embrix", emoji: "🦊", type: "fire", hp: 46, moves: [
-    { name: "Ember Dash", type: "fire", power: 16, acc: 90 },
-    { name: "Fluff Slam", type: "normal", power: 11, acc: 100 },
-    { name: "Warm Nap", type: "normal", power: 0, acc: 100, heal: 12 } ] },
-  lilypop: { name: "Lilypop", emoji: "🐸", type: "grass", hp: 48, moves: [
-    { name: "Leaf Boop", type: "grass", power: 16, acc: 90 },
-    { name: "Bouncy Bonk", type: "normal", power: 11, acc: 100 },
-    { name: "Sun Snack", type: "normal", power: 0, acc: 100, heal: 12 } ] },
-  sparkitty: { name: "Sparkitty", emoji: "🐱", type: "electric", hp: 42, moves: [
-    { name: "Zap Zap", type: "electric", power: 17, acc: 85 },
-    { name: "Paw Pat", type: "normal", power: 11, acc: 100 },
-    { name: "Static Fluff", type: "normal", power: 0, acc: 100, heal: 12 } ] },
-  frostle: { name: "Frostle", emoji: "🐧", type: "ice", hp: 44, moves: [
-    { name: "Snow Flurry", type: "ice", power: 16, acc: 90 },
-    { name: "Belly Flop", type: "normal", power: 11, acc: 100 },
-    { name: "Cocoa Break", type: "normal", power: 0, acc: 100, heal: 12 } ] },
-  bubbo: { name: "Bubbo", emoji: "🐙", type: "water", hp: 47, moves: [
-    { name: "Splashy Slap", type: "water", power: 16, acc: 90 },
-    { name: "Wiggle Tackle", type: "normal", power: 11, acc: 100 },
-    { name: "Bubble Bath", type: "normal", power: 0, acc: 100, heal: 12 } ] }
+  charmander: { 
+    name: "Charmander", 
+    type: "fire", 
+    hp: 46, 
+    spriteFront: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png",
+    spriteBack: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/4.png",
+    moves: [
+      { name: "Flamethrower", type: "fire", power: 16, acc: 90 },
+      { name: "Scratch", type: "normal", power: 11, acc: 100 },
+      { name: "Roost", type: "normal", power: 0, acc: 100, heal: 12 }
+    ] 
+  },
+  bulbasaur: { 
+    name: "Bulbasaur", 
+    type: "grass", 
+    hp: 48, 
+    spriteFront: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+    spriteBack: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png",
+    moves: [
+      { name: "Vine Whip", type: "grass", power: 16, acc: 90 },
+      { name: "Tackle", type: "normal", power: 11, acc: 100 },
+      { name: "Synthesis", type: "normal", power: 0, acc: 100, heal: 12 }
+    ] 
+  },
+  pikachu: { 
+    name: "Pikachu", 
+    type: "electric", 
+    hp: 42, 
+    spriteFront: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+    spriteBack: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png",
+    moves: [
+      { name: "Thunderbolt", type: "electric", power: 17, acc: 85 },
+      { name: "Quick Attack", type: "normal", power: 11, acc: 100 },
+      { name: "Rest", type: "normal", power: 0, acc: 100, heal: 12 }
+    ] 
+  },
+  squirtle: { 
+    name: "Squirtle", 
+    type: "water", 
+    hp: 47, 
+    spriteFront: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png",
+    spriteBack: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/7.png",
+    moves: [
+      { name: "Water Gun", type: "water", power: 16, acc: 90 },
+      { name: "Tackle", type: "normal", power: 11, acc: 100 },
+      { name: "Withdraw", type: "normal", power: 0, acc: 100, heal: 12 }
+    ] 
+  },
+  snorlax: { 
+    name: "Snorlax", 
+    type: "normal", 
+    hp: 55, 
+    spriteFront: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/143.png",
+    spriteBack: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/143.png",
+    moves: [
+      { name: "Body Slam", type: "normal", power: 18, acc: 90 },
+      { name: "Scratch", type: "normal", power: 11, acc: 100 },
+      { name: "Rest", type: "normal", power: 0, acc: 100, heal: 15 }
+    ] 
+  }
 };
 
-/* ---------- Code Peek snippets (for parts that are not functions) ---------- */
+// Complete CodePeek Snippets Database
 const snippets = {
-  variables:
-`let turn = 1;               // Number
-let busy = false;           // Boolean
-let selectedMove = null;    // null = nothing chosen
-let trainerName = "";       // String
-const playerTeam = [];      // Array (const: can't reassign)`,
-  form:
-`form.addEventListener("submit", function(event) {
-  event.preventDefault();   // stop normal submit
-
-  if (nameInput.value.trim() === "") {
-    error.textContent = "Please enter your name";
-  } else if (passInput.value.length < 8) {
-    error.textContent = "Password must be 8+ chars";
-  } else {
-    startBattle();
+  variables: `let trainerName = "";
+let chosenStarterKey = "charmander";
+const playerTeam = [];`,
+  form: `form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  if (nameInput.value && passInput.value.length >= 8) {
+    showSelectionScreen();
   }
 });`,
-  click:
-`button.addEventListener("click", () => {
-  playerTurn(move);   // callback runs on click
+  selection: `Object.keys(pals).forEach(key => {
+  // dynamically generate selection buttons
 });`,
-  hover:
-`button.addEventListener("mouseover", () => {
-  info.textContent = move.name + ": " + desc;
+  click: `button.addEventListener("click", () => {
+  playSound('click');
+  playerTurn(move);
 });`,
-  moves:
-`creature.moves.forEach((move) => {
+  hover: `button.addEventListener("mouseover", () => {
+  info.textContent = move.name + ":" + desc;
+});`,
+  moves: `creature.moves.forEach((move) => {
   const btn = document.createElement("button");
   btn.textContent = move.name;
-  movesBox.append(btn);
 });`,
-  timeout:
-`busy = true;               // player must wait
-setTimeout(enemyTurn, 1200);
-// JS keeps running other code.
-// enemyTurn is a callback that runs
-// 1.2 seconds (1200 ms) later.`,
-  faint:
-`const fainted = team[0];
-setTimeout(() => {
-  team.shift();            // remove the first pal
-  if (team.length === 0) {
-    endGame();             // no pals left!
-  } else {
-    // team[0] is the next battler
-  }
-}, 1200);`,
-  log:
-`battleLog.push(text);                  // add to array
+  timeout: `busy = true;
+setTimeout(enemyTurn, 1200);`,
+  faint: `team.shift();
+if (team.length === 0) {
+  endGame();
+}`,
+  log: `battleLog.push(text);
 const li = document.createElement("li");
 li.textContent = text;
 logBox.appendChild(li);`,
-  hpbar:
-`const percent = (hp / maxHp) * 100;
-bar.style.width = percent + "%";
-if (percent > 50) {
-  bar.className = "bar good";
-} else if (percent > 20) {
-  bar.className = "bar warn";
-} else {
-  bar.className = "bar danger";
-}`,
-  cheer:
-`let bonus = 0;
-if (turn % 3 === 0) {   // % = remainder
-  bonus = 3;            // trainer cheer!
-}
-// ...later, when the round ends:
-turn++;`,
-  team:
-`let dots = "";
-for (const pal of playerTeam) {
-  dots += pal.emoji;
-}
-// playerTeam.length = pals left`
+  hpbar: `const percent = (hp / maxHp) * 100;
+bar.style.width = percent + "%";`,
+  cheer: `let bonus = turn % 3 === 0 ? 3 : 0;`,
+  team: `for (const pal of playerTeam) {
+  // render sprite thumbnail
+}`
 };
 
-/* ---------- Code Peek machinery ---------- */
 function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function highlight(code) {
-  const pattern = /(\/\/.*)|("[^"\n]*"|'[^'\n]*')|\b(const|let|function|return|if|else|for|while|of|in|new|null|true|false|this)\b|\b(\d+\.?\d*)\b/g;
-  return escapeHtml(code).replace(pattern, function (match, comment, str, keyword, num) {
-    if (comment) { return '<span class="tok-com">' + comment + "</span>"; }
-    if (str)     { return '<span class="tok-str">' + str + "</span>"; }
-    if (keyword) { return '<span class="tok-kw">' + keyword + "</span>"; }
-    return '<span class="tok-num">' + num + "</span>";
-  });
 }
 
 function showPeek(entry) {
   document.getElementById("peekConcept").textContent = entry.concept;
   document.getElementById("peekNote").textContent = entry.note;
-  document.getElementById("peekCode").innerHTML = highlight(entry.code);
+  document.getElementById("peekCode").innerHTML = escapeHtml(entry.code);
 }
 
 function renderPeekHistory() {
@@ -404,7 +470,6 @@ function renderPeekHistory() {
   }
 }
 
-// focus = true means "show this one in the big panel right now"
 function peek(concept, code, note, focus) {
   for (let i = 0; i < peekHistory.length; i++) {
     if (peekHistory[i].concept === concept) { peekHistory.splice(i, 1); break; }
@@ -416,58 +481,44 @@ function peek(concept, code, note, focus) {
   renderPeekHistory();
 }
 
-/* ---------- Functions: create a pal (returns an object with methods) ---------- */
 function createCreature(template, owner) {
   return {
     name: template.name,
-    emoji: template.emoji,
     type: template.type,
     hp: template.hp,
     maxHp: template.hp,
+    spriteFront: template.spriteFront,
+    spriteBack: template.spriteBack,
     moves: template.moves,
     owner: owner,
     isFainted: false,
     takeDamage(amount) {
       this.hp -= amount;
-      if (this.hp <= 0) {
-        this.hp = 0;
-        this.isFainted = true;
-      }
+      if (this.hp <= 0) { this.hp = 0; this.isFainted = true; }
     },
     heal(amount) {
       this.hp += amount;
-      if (this.hp > this.maxHp) {
-        this.hp = this.maxHp;
-      }
+      if (this.hp > this.maxHp) { this.hp = this.maxHp; }
     }
   };
 }
 
-/* Returns a value instead of displaying it: the caller decides what to do */
 function calculateDamage(move, defender, bonus) {
   const missed = Math.random() * 100 >= move.acc;
-  if (missed) {
-    return { missed: true, damage: 0, multiplier: 1, crit: false };
-  }
+  if (missed) { return { missed: true, damage: 0, multiplier: 1, crit: false }; }
   const chart = typeChart[move.type] || {};
   const multiplier = chart[defender.type] || 1;
   const crit = Math.random() < 0.125;
   let damage = move.power * multiplier;
-  if (crit) {
-    damage *= 1.5;
-  }
+  if (crit) { damage *= 1.5; }
   damage = Math.round(damage + bonus + Math.random() * 3);
   return { missed: false, damage: damage, multiplier: multiplier, crit: crit };
 }
 
 function displayName(creature) {
-  if (creature.owner === "enemy") {
-    return "Foe " + creature.name;
-  }
-  return creature.name;
+  return creature.owner === "enemy" ? "Foe " + creature.name : creature.name;
 }
 
-/* ---------- DOM helpers ---------- */
 function addLog(text) {
   battleLog.push(text);
   const logBox = document.getElementById("log");
@@ -475,31 +526,37 @@ function addLog(text) {
   li.textContent = text;
   logBox.appendChild(li);
   logBox.scrollTop = logBox.scrollHeight;
-  peek("Arrays + createElement", snippets.log, "push() adds to the end of an array. createElement builds the <li> in memory and appendChild attaches it to the page.", false);
+  peek("Arrays + createElement", snippets.log, "push() adds to array. createElement builds the <li> in memory.", false);
 }
 
 function setCard(side, creature) {
   const percent = (creature.hp / creature.maxHp) * 100;
-  document.getElementById(side + "Name").textContent = creature.emoji + " " + displayName(creature) + "  " + typeEmoji[creature.type];
-  document.getElementById(side + "HpText").textContent = creature.hp + " / " + creature.maxHp + " HP";
-  document.getElementById(side + "Sprite").textContent = creature.emoji;
+  document.getElementById(side + "Name").textContent = displayName(creature) + "  " + typeEmoji[creature.type];
+  document.getElementById(side + "HpText").textContent = creature.hp + " / " + creature.maxHp;
+  
+  const spriteImg = document.getElementById(side + "Sprite");
+  if (side === "player") {
+    spriteImg.src = creature.spriteBack;
+  } else {
+    spriteImg.src = creature.spriteFront;
+  }
+
   const bar = document.getElementById(side + "Bar");
   bar.style.width = percent + "%";
-  if (percent > 50) {
-    bar.className = "bar good";
-  } else if (percent > 20) {
-    bar.className = "bar warn";
-  } else {
-    bar.className = "bar danger";
-  }
+  bar.className = percent > 50 ? "bar good" : percent > 20 ? "bar warn" : "bar danger";
+  peek("Operators + if/else", snippets.hpbar, "Dynamic bar width calculation with color changes based on HP percentage.", false);
 }
 
 function renderTeam(side, team) {
-  let dots = "";
+  const dotsContainer = document.getElementById(side + "TeamDots");
+  dotsContainer.innerHTML = "Team: ";
   for (const pal of team) {
-    dots += pal.emoji;
+    const img = document.createElement("img");
+    img.src = pal.spriteFront;
+    img.className = "team-thumb";
+    dotsContainer.append(img);
   }
-  document.getElementById(side + "TeamDots").textContent = "Team: " + dots + " (" + team.length + " left)";
+  peek("Loops: for...of", snippets.team, "for...of loops through each pal in the team array.", false);
 }
 
 function updateUI() {
@@ -507,20 +564,18 @@ function updateUI() {
   setCard("enemy", enemyTeam[0]);
   renderTeam("player", playerTeam);
   renderTeam("enemy", enemyTeam);
-  peek("Operators + if / else", snippets.hpbar, "The bar's width comes from division and multiplication. An if / else if / else chain picks the color.", false);
 }
 
 function shake(side) {
   const sprite = document.getElementById(side + "Sprite");
   sprite.classList.add("hit");
+  playSound('hit');
   setTimeout(() => sprite.classList.remove("hit"), 400);
 }
 
 function setButtons(disabled) {
   const buttons = document.getElementById("moves").querySelectorAll("button");
-  for (const btn of buttons) {
-    btn.disabled = disabled;
-  }
+  for (const btn of buttons) { btn.disabled = disabled; }
 }
 
 function renderMoves() {
@@ -531,32 +586,27 @@ function renderMoves() {
     const btn = document.createElement("button");
     btn.className = "btn type-" + move.type;
     btn.textContent = typeEmoji[move.type] + " " + move.name;
-
-    let desc = "";
-    if (move.heal) {
-      desc = "Heals " + move.heal + " HP";
-    } else {
-      desc = "Power " + move.power + " · " + move.acc + "% accuracy · " + move.type + " type";
-    }
-
-    btn.addEventListener("click", () => playerTurn(move));
-    btn.addEventListener("mouseover", () => {
-      info.textContent = move.name + ": " + desc;
-      peek("Events: mouseover", snippets.hover, "mouseover fires when the mouse moves over an element.", true);
+    let desc = move.heal ? "Heals " + move.heal + " HP" : "Power " + move.power + " · " + move.acc + "% accuracy";
+    
+    btn.addEventListener("click", () => {
+      playSound('click');
+      playerTurn(move);
+    });
+    btn.addEventListener("mouseover", () => { 
+      info.textContent = move.name + ": " + desc; 
+      peek("Events: mouseover", snippets.hover, "mouseover event listener updates the info box.", false);
     });
     movesBox.append(btn);
   });
-  peek("Loops: forEach", snippets.moves, "forEach calls a callback for each move, building one button per move.", false);
+  peek("Loops: forEach", snippets.moves, "forEach generates move buttons dynamically.", false);
 }
 
-/* ---------- Battle logic ---------- */
 function useMove(attacker, defender, move, bonus) {
   const defenderSide = defender.owner;
-
   if (move.heal) {
     attacker.heal(move.heal);
+    playSound('heal');
     addLog(displayName(attacker) + " used " + move.name + " and healed " + move.heal + " HP! 💖");
-    peek("Objects & methods", createCreature.toString(), "heal() is a method attached to the pal object. 'this' means the pal that called it.", true);
   } else {
     const result = calculateDamage(move, defender, bonus);
     if (result.missed) {
@@ -564,58 +614,45 @@ function useMove(attacker, defender, move, bonus) {
     } else {
       defender.takeDamage(result.damage);
       let text = displayName(attacker) + " used " + move.name + " for " + result.damage + " damage!";
-      if (result.multiplier > 1) {
-        text += " It's super effective! ⭐";
-      } else if (result.multiplier < 1) {
-        text += " Not very effective...";
-      }
-      if (result.crit) {
-        text += " Critical hit! 💥";
-      }
+      if (result.multiplier > 1) { text += " Super effective! ⭐"; }
+      else if (result.multiplier < 1) { text += " Not very effective..."; }
+      if (result.crit) { text += " Critical hit! 💥"; }
       addLog(text);
       shake(defenderSide);
     }
-    peek("Functions & return values", calculateDamage.toString(), "calculateDamage() RETURNS an object. It does not display anything. useMove() reads the result and decides what to show.", true);
   }
   updateUI();
 }
 
 function playerTurn(move) {
-  if (busy) { return; }            // ignore clicks while waiting
+  if (busy) { return; }
   busy = true;
   selectedMove = move;
   setButtons(true);
-  peek("Events: click", snippets.click, "The arrow function is a callback. It runs only when the click happens.", false);
+  peek("Events: click", snippets.click, "Click event handler triggers the player's turn.", false);
 
-  let bonus = 0;
-  if (turn % 3 === 0) {
-    bonus = 3;
-    addLog("📣 " + trainerName + " cheers! +3 power this turn!");
-    peek("Operators: % remainder", snippets.cheer, "turn % 3 === 0 is true on turns 3, 6, 9... A cheer bonus every third turn.", true);
+  let bonus = turn % 3 === 0 ? 3 : 0;
+  if (bonus > 0) { 
+    addLog("📣 " + trainerName + " cheers! +3 power!"); 
+    peek("Operators: % remainder", snippets.cheer, "turn % 3 === 0 triggers cheer bonus.", false);
   }
 
-  const player = playerTeam[0];
-  const enemy = enemyTeam[0];
-  useMove(player, enemy, move, bonus);
+  useMove(playerTeam[0], enemyTeam[0], move, bonus);
   selectedMove = null;
 
-  if (enemy.isFainted) {
+  if (enemyTeam[0].isFainted) {
     handleFaint("enemy");
   } else {
     setTimeout(enemyTurn, 1200);
-    peek("Async: setTimeout", snippets.timeout, "The enemy 'thinks' for 1.2 seconds. JavaScript doesn't freeze while waiting.", true);
+    peek("Async: setTimeout", snippets.timeout, "setTimeout creates a non-blocking asynchronous timer.", false);
   }
 }
 
 function enemyTurn() {
   const enemy = enemyTeam[0];
   const player = playerTeam[0];
-
   let move = enemy.moves[Math.floor(Math.random() * enemy.moves.length)];
-  if (move.heal && enemy.hp > enemy.maxHp / 2) {
-    move = enemy.moves[0];         // no healing when healthy
-  }
-
+  if (move.heal && enemy.hp > enemy.maxHp / 2) { move = enemy.moves[0]; }
   useMove(enemy, player, move, 0);
 
   if (player.isFainted) {
@@ -632,7 +669,8 @@ function handleFaint(side) {
   const fainted = team[0];
   addLog(displayName(fainted) + " fainted! 😵");
   document.getElementById(side + "Sprite").classList.add("faint");
-  peek("Arrays: shift & length", snippets.faint, "shift() removes the first element. length tells us how many pals are left.", true);
+  playSound('faint');
+  peek("Arrays: shift & length", snippets.faint, "shift() removes the fainted pal from the array.", false);
 
   setTimeout(() => {
     team.shift();
@@ -641,7 +679,7 @@ function handleFaint(side) {
       return;
     }
     document.getElementById(side + "Sprite").classList.remove("faint");
-    addLog(displayName(team[0]) + " joins the battle! ✨");
+    addLog(displayName(team[0]) + " enters the battle! ✨");
     renderMoves();
     updateUI();
     turn++;
@@ -653,48 +691,75 @@ function handleFaint(side) {
 function endGame(playerWon) {
   const overlay = document.getElementById("overlay");
   if (playerWon) {
-    document.getElementById("overlayEmoji").textContent = "🎉🏆🎉";
-    document.getElementById("overlayText").textContent = "You won, " + trainerName + "!";
+    document.getElementById("overlayEmoji").textContent = "🏆";
+    document.getElementById("overlayText").textContent = "YOU WON, " + trainerName.toUpperCase() + "!";
+    playSound('victory');
   } else {
     document.getElementById("overlayEmoji").textContent = "💤";
-    document.getElementById("overlayText").textContent = "Your pals need a nap. Try again!";
+    document.getElementById("overlayText").textContent = "YOU LOST... TRY AGAIN!";
   }
   overlay.classList.remove("hidden");
+}
+
+function initSelectScreen() {
+  const grid = document.getElementById("pokeGrid");
+  grid.innerHTML = "";
+  
+  Object.keys(pals).forEach((key) => {
+    const pal = pals[key];
+    const div = document.createElement("div");
+    div.className = "poke-option" + (key === chosenStarterKey ? " selected" : "");
+    div.innerHTML = `
+      <img class="poke-img" src="${pal.spriteFront}" alt="${pal.name}">
+      <div class="poke-title">${pal.name}</div>
+      <div class="poke-type">${typeEmoji[pal.type]} ${pal.type}</div>
+    `;
+    div.addEventListener("click", () => {
+      playSound('click');
+      document.querySelectorAll(".poke-option").forEach(el => el.classList.remove("selected"));
+      div.classList.add("selected");
+      chosenStarterKey = key;
+    });
+    grid.append(div);
+  });
+  peek("Objects & Arrays", snippets.selection, "Object.keys() and forEach populate the selection options.", false);
 }
 
 function startBattle() {
   playerTeam.length = 0;
   enemyTeam.length = 0;
   battleLog.length = 0;
-  for (const key of ["embrix", "lilypop", "sparkitty"]) {
-    playerTeam.push(createCreature(pals[key], "player"));
-  }
-  for (const key of ["bubbo", "frostle", "sparkitty"]) {
+
+  playerTeam.push(createCreature(pals[chosenStarterKey], "player"));
+  const otherKeys = Object.keys(pals).filter(k => k !== chosenStarterKey);
+  playerTeam.push(createCreature(pals[otherKeys[0]], "player"));
+  playerTeam.push(createCreature(pals[otherKeys[1]], "player"));
+
+  for (const key of ["squirtle", "bulbasaur", "pikachu"]) {
     enemyTeam.push(createCreature(pals[key], "enemy"));
   }
+
   turn = 1;
   busy = false;
   selectedMove = null;
 
   document.getElementById("log").innerHTML = "";
   document.getElementById("overlay").classList.add("hidden");
-  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("selectScreen").classList.add("hidden");
   document.getElementById("battleScreen").classList.remove("hidden");
   document.getElementById("playerSprite").classList.remove("faint");
   document.getElementById("enemySprite").classList.remove("faint");
 
   const tag = document.getElementById("trainerTag");
-  tag.textContent = "🎀 Trainer " + trainerName;
+  tag.textContent = "Trainer " + trainerName;
   tag.classList.remove("hidden");
 
   renderMoves();
   updateUI();
   setButtons(false);
-  addLog("A wild trainer challenges " + trainerName + "! Go, " + playerTeam[0].name + "!");
-  peek("Arrays: team for...of", snippets.team, "for...of reads each value in the array, one by one.", true);
+  addLog("A wild battle starts! Go, " + playerTeam[0].name + "!");
 }
 
-/* ---------- Form validation ---------- */
 const form = document.getElementById("trainerForm");
 const nameInput = document.getElementById("nameInput");
 const passInput = document.getElementById("passInput");
@@ -702,28 +767,41 @@ const formError = document.getElementById("formError");
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
+  playSound('click');
 
   if (nameInput.value.trim() === "") {
-    formError.textContent = "Please enter your trainer name 🌸";
+    formError.textContent = "Please enter your trainer name!";
   } else if (passInput.value.length < 8) {
-    formError.textContent = "Password must be at least 8 characters 🔒";
+    formError.textContent = "Password must be at least 8 characters!";
   } else {
     formError.textContent = "";
     trainerName = nameInput.value.trim();
-    startBattle();
-    return;
+    document.getElementById("startScreen").classList.add("hidden");
+    initSelectScreen();
+    document.getElementById("selectScreen").classList.remove("hidden");
   }
-  peek("Form validation", snippets.form, "preventDefault() stops the browser's normal submit so our if / else checks run first.", true);
+  peek("Form validation", snippets.form, "preventDefault() stops form submission to validate inputs.", false);
 });
 
-/* ---------- Other page events ---------- */
-document.getElementById("againBtn").addEventListener("click", startBattle);
+document.getElementById("confirmSelectBtn").addEventListener("click", () => {
+  playSound('click');
+  startBattle();
+});
+
+document.getElementById("againBtn").addEventListener("click", () => {
+  playSound('click');
+  document.getElementById("overlay").classList.add("hidden");
+  document.getElementById("battleScreen").classList.add("hidden");
+  document.getElementById("startScreen").classList.remove("hidden");
+  document.getElementById("trainerTag").classList.add("hidden");
+});
+
 document.getElementById("peekToggle").addEventListener("click", () => {
+  playSound('click');
   document.getElementById("peek").classList.toggle("hidden");
 });
 
-/* ---------- First thing the visitor sees in Code Peek ---------- */
-peek("Variables & data types", snippets.variables, "Welcome! Every action you take in the game will show the JavaScript that just ran. Try the sign-in form first.", true);
+peek("Variables & data types", snippets.variables, "Welcome! CodePeek tracks all JavaScript actions as you play.", true);
 </script>
 </body>
 </html>
