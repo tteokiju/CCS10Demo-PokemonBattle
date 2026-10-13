@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocket Pals Battle</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #ffd6e8;
+    --pink-deep: #ff8fb8;
+    --cream: #fff8ee;
+    --mint: #c9f2e3;
+    --lav: #e3d9ff;
+    --sky: #cfeaff;
+    --butter: #fff2b8;
+    --ink: #5b4a6b;
+    --shadow: 0 6px 0 rgba(91, 74, 107, 0.15);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Nunito", "Quicksand", "Trebuchet MS", system-ui, sans-serif;
+    font-weight: 600;
+    color: var(--ink);
+    background: linear-gradient(160deg, var(--pink) 0%, var(--lav) 50%, var(--sky) 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+  .hidden { display: none !important; }
+
+  header.top {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 22px; gap: 12px; flex-wrap: wrap;
+  }
+  header.top h1 { margin: 0; font-size: 1.7rem; font-weight: 800; letter-spacing: 0.5px; }
+  .trainer-tag { font-size: 0.95rem; background: white; padding: 6px 14px; border-radius: 99px; box-shadow: var(--shadow); }
+
+  .btn {
+    font-family: inherit; font-weight: 800; font-size: 1rem; color: var(--ink);
+    background: var(--butter); border: 3px solid var(--ink); border-radius: 16px;
+    padding: 8px 16px; cursor: pointer; box-shadow: var(--shadow);
+    transition: transform 0.12s, box-shadow 0.12s;
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-2px); }
+  .btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 rgba(91,74,107,.15); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .app { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 18px; padding: 0 22px 28px; max-width: 1280px; margin: 0 auto; }
+  @media (max-width: 960px) { .app { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--cream); border: 3px solid var(--ink); border-radius: 26px;
+    padding: 18px; box-shadow: var(--shadow); margin-bottom: 16px;
+  }
+  .card h2, .card h3 { margin: 0 0 10px; }
+
+  /* ---------- start screen ---------- */
+  #startScreen { text-align: center; max-width: 460px; margin: 20px auto; }
+  #startScreen .hero { font-size: 4rem; animation: bob 2s ease-in-out infinite; }
+  #startScreen label { display: block; text-align: left; margin: 12px 0 4px; font-weight: 800; }
+  #startScreen input {
+    width: 100%; padding: 10px 14px; font: inherit; border: 3px solid var(--ink);
+    border-radius: 14px; background: white; color: var(--ink);
+  }
+  #startScreen input:focus { outline: 3px solid var(--pink-deep); }
+  .error { min-height: 1.4em; color: #d6336c; font-weight: 800; margin: 10px 0 4px; }
+
+  /* ---------- battle scene ---------- */
+  .scene {
+    position: relative; height: 330px; border: 3px solid var(--ink); border-radius: 26px;
+    overflow: hidden; box-shadow: var(--shadow); margin-bottom: 16px;
+    background: linear-gradient(var(--sky) 0%, #f3fbff 55%, #bdeeb8 55%, #a6e3a1 100%);
+  }
+  .scene::before { content: "☁️"; position: absolute; top: 12px; left: 46%; font-size: 2rem; opacity: .8; animation: drift 9s ease-in-out infinite alternate; }
+  .scene::after  { content: "🌸"; position: absolute; bottom: 10px; left: 46%; font-size: 1.4rem; }
+  @keyframes drift { from { transform: translateX(-20px);} to { transform: translateX(30px);} }
+
+  .pal { position: absolute; text-align: center; }
+  .pal.enemy  { right: 12%; top: 14%; }
+  .pal.player { left: 12%; bottom: 6%; }
+  .pal .platform {
+    position: absolute; left: 50%; bottom: -6px; width: 130px; height: 28px;
+    transform: translateX(-50%); background: rgba(91,74,107,.18); border-radius: 50%; z-index: 0;
+  }
+  .sprite {
+    position: relative; z-index: 1; font-size: 5.2rem; line-height: 1;
+    animation: bob 2.2s ease-in-out infinite; filter: drop-shadow(0 6px 4px rgba(0,0,0,.15));
+  }
+  .pal.player .sprite { transform: scaleX(-1); animation: bobFlip 2.2s ease-in-out infinite; }
+  @keyframes bob { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-8px);} }
+  @keyframes bobFlip { 0%,100% { transform: scaleX(-1) translateY(0);} 50% { transform: scaleX(-1) translateY(-8px);} }
+  .sprite.hit { animation: hit 0.4s ease; }
+  .pal.player .sprite.hit { animation: hitFlip 0.4s ease; }
+  @keyframes hit { 0%,100% { transform: translateX(0); filter: brightness(1);} 25% { transform: translateX(-14px); filter: brightness(2);} 75% { transform: translateX(14px); filter: brightness(2);} }
+  @keyframes hitFlip { 0%,100% { transform: scaleX(-1) translateX(0); filter: brightness(1);} 25% { transform: scaleX(-1) translateX(-14px); filter: brightness(2);} 75% { transform: scaleX(-1) translateX(14px); filter: brightness(2);} }
+  .sprite.faint { animation: faint 1s forwards; }
+  .pal.player .sprite.faint { animation: faintFlip 1s forwards; }
+  @keyframes faint { to { transform: translateY(70px) rotate(25deg); opacity: 0; } }
+  @keyframes faintFlip { to { transform: scaleX(-1) translateY(70px) rotate(-25deg); opacity: 0; } }
+
+  .infobox {
+    position: absolute; background: white; border: 3px solid var(--ink); border-radius: 18px;
+    padding: 8px 12px; min-width: 200px; box-shadow: var(--shadow); z-index: 2;
+  }
+  .infobox.enemy-box  { left: 4%; top: 8%; }
+  .infobox.player-box { right: 4%; bottom: 8%; }
+  .infobox .name { font-weight: 800; display: flex; justify-content: space-between; gap: 8px; }
+  .infobox .team-dots { font-size: .9rem; margin-top: 4px; letter-spacing: 2px; }
+  .hp { height: 12px; background: #ece6f2; border-radius: 99px; overflow: hidden; margin: 6px 0 2px; border: 2px solid var(--ink); }
+  .bar { height: 100%; width: 100%; transition: width .5s ease, background .3s; border-radius: 99px; }
+  .bar.good { background: #6fdc8c; }
+  .bar.warn { background: #ffd54f; }
+  .bar.danger { background: #ff6b81; }
+  .hp-text { font-size: .8rem; text-align: right; }
+
+  /* ---------- action panel ---------- */
+  #info { min-height: 2.6em; background: white; border: 3px dashed var(--pink-deep); border-radius: 14px; padding: 8px 12px; margin-bottom: 12px; }
+  #moves { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  #moves button { padding: 12px 8px; }
+  .type-fire { background: #ffd0c2 !important; }
+  .type-water { background: #c7e4ff !important; }
+  .type-grass { background: #cdf3c4 !important; }
+  .type-electric { background: #fff0a8 !important; }
+  .type-ice { background: #d9f6ff !important; }
+  .type-normal { background: #eee6f5 !important; }
+
+  #log { list-style: none; margin: 0; padding: 0; max-height: 180px; overflow-y: auto; }
+  #log li { padding: 6px 10px; border-radius: 12px; margin-bottom: 6px; background: white; animation: pop .25s ease; }
+  #log li:nth-child(even) { background: var(--lav); }
+  @keyframes pop { from { transform: scale(.9); opacity: 0;} to { transform: scale(1); opacity: 1;} }
+
+  /* ---------- code peek ---------- */
+  #peek { position: sticky; top: 14px; align-self: start; background: #2f2640; color: #f4eefc; border: 3px solid var(--ink); border-radius: 26px; padding: 16px; box-shadow: var(--shadow); max-height: calc(100vh - 28px); overflow-y: auto; }
+  @media (max-width: 960px) { #peek { position: static; max-height: none; } }
+  #peek h2 { margin: 0 0 8px; font-size: 1.15rem; color: var(--butter); }
+  #peekConcept { display: inline-block; background: var(--pink-deep); color: #3a2147; padding: 4px 12px; border-radius: 99px; font-weight: 800; margin-bottom: 8px; }
+  #peekNote { margin: 0 0 10px; color: #dcd0f0; font-size: .92rem; }
+  #peekCode {
+    margin: 0 0 12px; background: #1f1830; border-radius: 14px; padding: 12px; overflow-x: auto;
+    font-family: "Fira Code", Consolas, monospace; font-size: .8rem; line-height: 1.5; font-weight: 400; white-space: pre; color: #f4eefc;
+  }
+  .tok-kw { color: #ff9ac6; } .tok-str { color: #a6e3a1; } .tok-num { color: #ffd54f; } .tok-com { color: #9a8fb0; font-style: italic; }
+  #peekHistory { display: flex; flex-wrap: wrap; gap: 6px; }
+  #peekHistory button { font-family: inherit; font-weight: 800; font-size: .72rem; border: 2px solid #8b7aa8; background: #3b3150; color: #f4eefc; border-radius: 99px; padding: 3px 10px; cursor: pointer; }
+  #peekHistory button:hover { background: #55467a; }
+  .peek-sub { font-size: .75rem; color: #b8a9d4; margin: 6px 0; }
+
+  /* ---------- overlay ---------- */
+  #overlay { position: fixed; inset: 0; background: rgba(91,74,107,.55); display: flex; align-items: center; justify-content: center; z-index: 10; }
+  #overlay .card { text-align: center; max-width: 380px; margin: 0; }
+  #overlay .big { font-size: 4rem; }
+
+  @media (max-width: 600px) {
+    .scene { height: 300px; }
+    .sprite { font-size: 3.6rem; }
+    .infobox { min-width: 150px; font-size: .85rem; }
+    header.top h1 { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1>✨ Pocket Pals Battle ✨</h1>
+  <div style="display:flex; gap:10px; align-items:center;">
+    <span id="trainerTag" class="trainer-tag hidden"></span>
+    <button id="peekToggle" class="btn">👀 Code Peek</button>
+  </div>
+</header>
+
+<div class="app">
+  <main>
+    <!-- Start screen with form validation -->
+    <section id="startScreen" class="card">
+      <div class="hero">🦊🐸🐱</div>
+      <h2>Welcome, Trainer!</h2>
+      <p>Sign in to start your battle.</p>
+      <form id="trainerForm" novalidate>
+        <label for="nameInput">Trainer name</label>
+        <input id="nameInput" type="text" placeholder="e.g. Mochi" autocomplete="off">
+        <label for="passInput">Secret password (8+ characters)</label>
+        <input id="passInput" type="password" placeholder="••••••••">
+        <p id="formError" class="error"></p>
+        <button class="btn" type="submit">Start battle! 🌟</button>
+      </form>
+    </section>
+
+    <!-- Battle screen -->
+    <section id="battleScreen" class="hidden">
+      <div class="scene">
+        <div class="infobox enemy-box">
+          <div class="name"><span id="enemyName"></span></div>
+          <div class="hp"><div id="enemyBar" class="bar good"></div></div>
+          <div class="hp-text" id="enemyHpText"></div>
+          <div class="team-dots" id="enemyTeamDots"></div>
+        </div>
+        <div class="pal enemy"><div class="sprite" id="enemySprite"></div><div class="platform"></div></div>
+
+        <div class="pal player"><div class="sprite" id="playerSprite"></div><div class="platform"></div></div>
+        <div class="infobox player-box">
+          <div class="name"><span id="playerName"></span></div>
+          <div class="hp"><div id="playerBar" class="bar good"></div></div>
+          <div class="hp-text" id="playerHpText"></div>
+          <div class="team-dots" id="playerTeamDots"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>What will you do? 🎀</h3>
+        <div id="info">Hover over a move to see what it does!</div>
+        <div id="moves"></div>
+      </div>
+
+      <div class="card">
+        <h3>Battle log 📜</h3>
+        <ul id="log"></ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Code Peek panel -->
+  <aside id="peek">
+    <h2>👀 Code Peek</h2>
+    <span id="peekConcept"></span>
+    <p id="peekNote"></p>
+    <pre id="peekCode"></pre>
+    <div class="peek-sub">Recent concepts (click to look back):</div>
+    <div id="peekHistory"></div>
+  </aside>
+</div>
+
+<div id="overlay" class="hidden">
+  <div class="card">
+    <div class="big" id="overlayEmoji"></div>
+    <h2 id="overlayText"></h2>
+    <button id="againBtn" class="btn">Play again 🔁</button>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   POCKET PALS BATTLE
+   Uses only the JavaScript topics from our written report:
+   variables, data types, operators, conditionals, loops,
+   functions & scope, arrays, objects, DOM, events,
+   form validation, callbacks and setTimeout.
+   ========================================================= */
+
+/* ---------- Variables & data types ---------- */
+let trainerName = "";        // String
+let turn = 1;                // Number
+let busy = false;            // Boolean
+let selectedMove = null;     // null = no move chosen yet
+const playerTeam = [];       // Array
+const enemyTeam = [];        // Array
+const battleLog = [];        // Array
+const peekHistory = [];      // Array
+
+/* ---------- Objects: the type chart and our pals ---------- */
+const typeChart = {
+  fire:     { grass: 2, ice: 2, water: 0.5, fire: 0.5 },
+  water:    { fire: 2, water: 0.5, grass: 0.5 },
+  grass:    { water: 2, fire: 0.5, grass: 0.5 },
+  electric: { water: 2, grass: 0.5, electric: 0.5 },
+  ice:      { grass: 2, fire: 0.5, ice: 0.5 },
+  normal:   {}
+};
+
+const typeEmoji = { fire: "🔥", water: "💧", grass: "🌿", electric: "⚡", ice: "❄️", normal: "⭐" };
+
+const pals = {
+  embrix: { name: "Embrix", emoji: "🦊", type: "fire", hp: 46, moves: [
+    { name: "Ember Dash", type: "fire", power: 16, acc: 90 },
+    { name: "Fluff Slam", type: "normal", power: 11, acc: 100 },
+    { name: "Warm Nap", type: "normal", power: 0, acc: 100, heal: 12 } ] },
+  lilypop: { name: "Lilypop", emoji: "🐸", type: "grass", hp: 48, moves: [
+    { name: "Leaf Boop", type: "grass", power: 16, acc: 90 },
+    { name: "Bouncy Bonk", type: "normal", power: 11, acc: 100 },
+    { name: "Sun Snack", type: "normal", power: 0, acc: 100, heal: 12 } ] },
+  sparkitty: { name: "Sparkitty", emoji: "🐱", type: "electric", hp: 42, moves: [
+    { name: "Zap Zap", type: "electric", power: 17, acc: 85 },
+    { name: "Paw Pat", type: "normal", power: 11, acc: 100 },
+    { name: "Static Fluff", type: "normal", power: 0, acc: 100, heal: 12 } ] },
+  frostle: { name: "Frostle", emoji: "🐧", type: "ice", hp: 44, moves: [
+    { name: "Snow Flurry", type: "ice", power: 16, acc: 90 },
+    { name: "Belly Flop", type: "normal", power: 11, acc: 100 },
+    { name: "Cocoa Break", type: "normal", power: 0, acc: 100, heal: 12 } ] },
+  bubbo: { name: "Bubbo", emoji: "🐙", type: "water", hp: 47, moves: [
+    { name: "Splashy Slap", type: "water", power: 16, acc: 90 },
+    { name: "Wiggle Tackle", type: "normal", power: 11, acc: 100 },
+    { name: "Bubble Bath", type: "normal", power: 0, acc: 100, heal: 12 } ] }
+};
+
+/* ---------- Code Peek snippets (for parts that are not functions) ---------- */
+const snippets = {
+  variables:
+`let turn = 1;               // Number
+let busy = false;           // Boolean
+let selectedMove = null;    // null = nothing chosen
+let trainerName = "";       // String
+const playerTeam = [];      // Array (const: can't reassign)`,
+  form:
+`form.addEventListener("submit", function(event) {
+  event.preventDefault();   // stop normal submit
+
+  if (nameInput.value.trim() === "") {
+    error.textContent = "Please enter your name";
+  } else if (passInput.value.length < 8) {
+    error.textContent = "Password must be 8+ chars";
+  } else {
+    startBattle();
+  }
+});`,
+  click:
+`button.addEventListener("click", () => {
+  playerTurn(move);   // callback runs on click
+});`,
+  hover:
+`button.addEventListener("mouseover", () => {
+  info.textContent = move.name + ": " + desc;
+});`,
+  moves:
+`creature.moves.forEach((move) => {
+  const btn = document.createElement("button");
+  btn.textContent = move.name;
+  movesBox.append(btn);
+});`,
+  timeout:
+`busy = true;               // player must wait
+setTimeout(enemyTurn, 1200);
+// JS keeps running other code.
+// enemyTurn is a callback that runs
+// 1.2 seconds (1200 ms) later.`,
+  faint:
+`const fainted = team[0];
+setTimeout(() => {
+  team.shift();            // remove the first pal
+  if (team.length === 0) {
+    endGame();             // no pals left!
+  } else {
+    // team[0] is the next battler
+  }
+}, 1200);`,
+  log:
+`battleLog.push(text);                  // add to array
+const li = document.createElement("li");
+li.textContent = text;
+logBox.appendChild(li);`,
+  hpbar:
+`const percent = (hp / maxHp) * 100;
+bar.style.width = percent + "%";
+if (percent > 50) {
+  bar.className = "bar good";
+} else if (percent > 20) {
+  bar.className = "bar warn";
+} else {
+  bar.className = "bar danger";
+}`,
+  cheer:
+`let bonus = 0;
+if (turn % 3 === 0) {   // % = remainder
+  bonus = 3;            // trainer cheer!
+}
+// ...later, when the round ends:
+turn++;`,
+  team:
+`let dots = "";
+for (const pal of playerTeam) {
+  dots += pal.emoji;
+}
+// playerTeam.length = pals left`
+};
+
+/* ---------- Code Peek machinery ---------- */
+function escapeHtml(text) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function highlight(code) {
+  const pattern = /(\/\/.*)|("[^"\n]*"|'[^'\n]*')|\b(const|let|function|return|if|else|for|while|of|in|new|null|true|false|this)\b|\b(\d+\.?\d*)\b/g;
+  return escapeHtml(code).replace(pattern, function (match, comment, str, keyword, num) {
+    if (comment) { return '<span class="tok-com">' + comment + "</span>"; }
+    if (str)     { return '<span class="tok-str">' + str + "</span>"; }
+    if (keyword) { return '<span class="tok-kw">' + keyword + "</span>"; }
+    return '<span class="tok-num">' + num + "</span>";
+  });
+}
+
+function showPeek(entry) {
+  document.getElementById("peekConcept").textContent = entry.concept;
+  document.getElementById("peekNote").textContent = entry.note;
+  document.getElementById("peekCode").innerHTML = highlight(entry.code);
+}
+
+function renderPeekHistory() {
+  const box = document.getElementById("peekHistory");
+  box.innerHTML = "";
+  for (const entry of peekHistory) {
+    const chip = document.createElement("button");
+    chip.textContent = entry.concept;
+    chip.addEventListener("click", () => showPeek(entry));
+    box.append(chip);
+  }
+}
+
+// focus = true means "show this one in the big panel right now"
+function peek(concept, code, note, focus) {
+  for (let i = 0; i < peekHistory.length; i++) {
+    if (peekHistory[i].concept === concept) { peekHistory.splice(i, 1); break; }
+  }
+  const entry = { concept: concept, code: code, note: note };
+  peekHistory.push(entry);
+  if (peekHistory.length > 8) { peekHistory.shift(); }
+  if (focus) { showPeek(entry); }
+  renderPeekHistory();
+}
+
+/* ---------- Functions: create a pal (returns an object with methods) ---------- */
+function createCreature(template, owner) {
+  return {
+    name: template.name,
+    emoji: template.emoji,
+    type: template.type,
+    hp: template.hp,
+    maxHp: template.hp,
+    moves: template.moves,
+    owner: owner,
+    isFainted: false,
+    takeDamage(amount) {
+      this.hp -= amount;
+      if (this.hp <= 0) {
+        this.hp = 0;
+        this.isFainted = true;
+      }
+    },
+    heal(amount) {
+      this.hp += amount;
+      if (this.hp > this.maxHp) {
+        this.hp = this.maxHp;
+      }
+    }
+  };
+}
+
+/* Returns a value instead of displaying it: the caller decides what to do */
+function calculateDamage(move, defender, bonus) {
+  const missed = Math.random() * 100 >= move.acc;
+  if (missed) {
+    return { missed: true, damage: 0, multiplier: 1, crit: false };
+  }
+  const chart = typeChart[move.type] || {};
+  const multiplier = chart[defender.type] || 1;
+  const crit = Math.random() < 0.125;
+  let damage = move.power * multiplier;
+  if (crit) {
+    damage *= 1.5;
+  }
+  damage = Math.round(damage + bonus + Math.random() * 3);
+  return { missed: false, damage: damage, multiplier: multiplier, crit: crit };
+}
+
+function displayName(creature) {
+  if (creature.owner === "enemy") {
+    return "Foe " + creature.name;
+  }
+  return creature.name;
+}
+
+/* ---------- DOM helpers ---------- */
+function addLog(text) {
+  battleLog.push(text);
+  const logBox = document.getElementById("log");
+  const li = document.createElement("li");
+  li.textContent = text;
+  logBox.appendChild(li);
+  logBox.scrollTop = logBox.scrollHeight;
+  peek("Arrays + createElement", snippets.log, "push() adds to the end of an array. createElement builds the <li> in memory and appendChild attaches it to the page.", false);
+}
+
+function setCard(side, creature) {
+  const percent = (creature.hp / creature.maxHp) * 100;
+  document.getElementById(side + "Name").textContent = creature.emoji + " " + displayName(creature) + "  " + typeEmoji[creature.type];
+  document.getElementById(side + "HpText").textContent = creature.hp + " / " + creature.maxHp + " HP";
+  document.getElementById(side + "Sprite").textContent = creature.emoji;
+  const bar = document.getElementById(side + "Bar");
+  bar.style.width = percent + "%";
+  if (percent > 50) {
+    bar.className = "bar good";
+  } else if (percent > 20) {
+    bar.className = "bar warn";
+  } else {
+    bar.className = "bar danger";
+  }
+}
+
+function renderTeam(side, team) {
+  let dots = "";
+  for (const pal of team) {
+    dots += pal.emoji;
+  }
+  document.getElementById(side + "TeamDots").textContent = "Team: " + dots + " (" + team.length + " left)";
+}
+
+function updateUI() {
+  setCard("player", playerTeam[0]);
+  setCard("enemy", enemyTeam[0]);
+  renderTeam("player", playerTeam);
+  renderTeam("enemy", enemyTeam);
+  peek("Operators + if / else", snippets.hpbar, "The bar's width comes from division and multiplication. An if / else if / else chain picks the color.", false);
+}
+
+function shake(side) {
+  const sprite = document.getElementById(side + "Sprite");
+  sprite.classList.add("hit");
+  setTimeout(() => sprite.classList.remove("hit"), 400);
+}
+
+function setButtons(disabled) {
+  const buttons = document.getElementById("moves").querySelectorAll("button");
+  for (const btn of buttons) {
+    btn.disabled = disabled;
+  }
+}
+
+function renderMoves() {
+  const movesBox = document.getElementById("moves");
+  const info = document.getElementById("info");
+  movesBox.innerHTML = "";
+  playerTeam[0].moves.forEach((move) => {
+    const btn = document.createElement("button");
+    btn.className = "btn type-" + move.type;
+    btn.textContent = typeEmoji[move.type] + " " + move.name;
+
+    let desc = "";
+    if (move.heal) {
+      desc = "Heals " + move.heal + " HP";
+    } else {
+      desc = "Power " + move.power + " · " + move.acc + "% accuracy · " + move.type + " type";
+    }
+
+    btn.addEventListener("click", () => playerTurn(move));
+    btn.addEventListener("mouseover", () => {
+      info.textContent = move.name + ": " + desc;
+      peek("Events: mouseover", snippets.hover, "mouseover fires when the mouse moves over an element.", true);
+    });
+    movesBox.append(btn);
+  });
+  peek("Loops: forEach", snippets.moves, "forEach calls a callback for each move, building one button per move.", false);
+}
+
+/* ---------- Battle logic ---------- */
+function useMove(attacker, defender, move, bonus) {
+  const defenderSide = defender.owner;
+
+  if (move.heal) {
+    attacker.heal(move.heal);
+    addLog(displayName(attacker) + " used " + move.name + " and healed " + move.heal + " HP! 💖");
+    peek("Objects & methods", createCreature.toString(), "heal() is a method attached to the pal object. 'this' means the pal that called it.", true);
+  } else {
+    const result = calculateDamage(move, defender, bonus);
+    if (result.missed) {
+      addLog(displayName(attacker) + " used " + move.name + "... but it missed! 💨");
+    } else {
+      defender.takeDamage(result.damage);
+      let text = displayName(attacker) + " used " + move.name + " for " + result.damage + " damage!";
+      if (result.multiplier > 1) {
+        text += " It's super effective! ⭐";
+      } else if (result.multiplier < 1) {
+        text += " Not very effective...";
+      }
+      if (result.crit) {
+        text += " Critical hit! 💥";
+      }
+      addLog(text);
+      shake(defenderSide);
+    }
+    peek("Functions & return values", calculateDamage.toString(), "calculateDamage() RETURNS an object. It does not display anything. useMove() reads the result and decides what to show.", true);
+  }
+  updateUI();
+}
+
+function playerTurn(move) {
+  if (busy) { return; }            // ignore clicks while waiting
+  busy = true;
+  selectedMove = move;
+  setButtons(true);
+  peek("Events: click", snippets.click, "The arrow function is a callback. It runs only when the click happens.", false);
+
+  let bonus = 0;
+  if (turn % 3 === 0) {
+    bonus = 3;
+    addLog("📣 " + trainerName + " cheers! +3 power this turn!");
+    peek("Operators: % remainder", snippets.cheer, "turn % 3 === 0 is true on turns 3, 6, 9... A cheer bonus every third turn.", true);
+  }
+
+  const player = playerTeam[0];
+  const enemy = enemyTeam[0];
+  useMove(player, enemy, move, bonus);
+  selectedMove = null;
+
+  if (enemy.isFainted) {
+    handleFaint("enemy");
+  } else {
+    setTimeout(enemyTurn, 1200);
+    peek("Async: setTimeout", snippets.timeout, "The enemy 'thinks' for 1.2 seconds. JavaScript doesn't freeze while waiting.", true);
+  }
+}
+
+function enemyTurn() {
+  const enemy = enemyTeam[0];
+  const player = playerTeam[0];
+
+  let move = enemy.moves[Math.floor(Math.random() * enemy.moves.length)];
+  if (move.heal && enemy.hp > enemy.maxHp / 2) {
+    move = enemy.moves[0];         // no healing when healthy
+  }
+
+  useMove(enemy, player, move, 0);
+
+  if (player.isFainted) {
+    handleFaint("player");
+  } else {
+    turn++;
+    busy = false;
+    setButtons(false);
+  }
+}
+
+function handleFaint(side) {
+  const team = side === "enemy" ? enemyTeam : playerTeam;
+  const fainted = team[0];
+  addLog(displayName(fainted) + " fainted! 😵");
+  document.getElementById(side + "Sprite").classList.add("faint");
+  peek("Arrays: shift & length", snippets.faint, "shift() removes the first element. length tells us how many pals are left.", true);
+
+  setTimeout(() => {
+    team.shift();
+    if (team.length === 0) {
+      endGame(side === "enemy");
+      return;
+    }
+    document.getElementById(side + "Sprite").classList.remove("faint");
+    addLog(displayName(team[0]) + " joins the battle! ✨");
+    renderMoves();
+    updateUI();
+    turn++;
+    busy = false;
+    setButtons(false);
+  }, 1200);
+}
+
+function endGame(playerWon) {
+  const overlay = document.getElementById("overlay");
+  if (playerWon) {
+    document.getElementById("overlayEmoji").textContent = "🎉🏆🎉";
+    document.getElementById("overlayText").textContent = "You won, " + trainerName + "!";
+  } else {
+    document.getElementById("overlayEmoji").textContent = "💤";
+    document.getElementById("overlayText").textContent = "Your pals need a nap. Try again!";
+  }
+  overlay.classList.remove("hidden");
+}
+
+function startBattle() {
+  playerTeam.length = 0;
+  enemyTeam.length = 0;
+  battleLog.length = 0;
+  for (const key of ["embrix", "lilypop", "sparkitty"]) {
+    playerTeam.push(createCreature(pals[key], "player"));
+  }
+  for (const key of ["bubbo", "frostle", "sparkitty"]) {
+    enemyTeam.push(createCreature(pals[key], "enemy"));
+  }
+  turn = 1;
+  busy = false;
+  selectedMove = null;
+
+  document.getElementById("log").innerHTML = "";
+  document.getElementById("overlay").classList.add("hidden");
+  document.getElementById("startScreen").classList.add("hidden");
+  document.getElementById("battleScreen").classList.remove("hidden");
+  document.getElementById("playerSprite").classList.remove("faint");
+  document.getElementById("enemySprite").classList.remove("faint");
+
+  const tag = document.getElementById("trainerTag");
+  tag.textContent = "🎀 Trainer " + trainerName;
+  tag.classList.remove("hidden");
+
+  renderMoves();
+  updateUI();
+  setButtons(false);
+  addLog("A wild trainer challenges " + trainerName + "! Go, " + playerTeam[0].name + "!");
+  peek("Arrays: team for...of", snippets.team, "for...of reads each value in the array, one by one.", true);
+}
+
+/* ---------- Form validation ---------- */
+const form = document.getElementById("trainerForm");
+const nameInput = document.getElementById("nameInput");
+const passInput = document.getElementById("passInput");
+const formError = document.getElementById("formError");
+
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+
+  if (nameInput.value.trim() === "") {
+    formError.textContent = "Please enter your trainer name 🌸";
+  } else if (passInput.value.length < 8) {
+    formError.textContent = "Password must be at least 8 characters 🔒";
+  } else {
+    formError.textContent = "";
+    trainerName = nameInput.value.trim();
+    startBattle();
+    return;
+  }
+  peek("Form validation", snippets.form, "preventDefault() stops the browser's normal submit so our if / else checks run first.", true);
+});
+
+/* ---------- Other page events ---------- */
+document.getElementById("againBtn").addEventListener("click", startBattle);
+document.getElementById("peekToggle").addEventListener("click", () => {
+  document.getElementById("peek").classList.toggle("hidden");
+});
+
+/* ---------- First thing the visitor sees in Code Peek ---------- */
+peek("Variables & data types", snippets.variables, "Welcome! Every action you take in the game will show the JavaScript that just ran. Try the sign-in form first.", true);
+</script>
+</body>
+</html>
