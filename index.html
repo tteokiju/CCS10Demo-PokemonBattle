@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pocket Pals Retro Battle Arena</title>
+<title>CCS10 Demo - Pokemon Battle</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -176,7 +176,7 @@
 <body>
 
 <header class="top">
-  <h1>⚡ Pocket Pals Battle</h1>
+  <h1>⚡ Pokemon Battle</h1>
   <div style="display:flex; gap:10px; align-items:center;">
     <span id="trainerTag" class="trainer-tag hidden"></span>
     <button id="peekToggle" class="btn">👀 Code Peek</button>
@@ -274,9 +274,6 @@
 </div>
 
 <script>
-/* =========================================================
-   AUTHENTIC RETRO POCKET PALS BATTLE & SOUND SYNTHESIS
-   ========================================================= */
 
 // Web Audio API Sound Synthesizer
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
