@@ -47,7 +47,7 @@
   .btn:active:not(:disabled) { transform: translateY(2px); box-shadow: 2px 2px 0px #000; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  .app { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 15px; max-width: 1240px; margin: 0 auto; }
+  .app { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 15px; max-width: 1240px; margin: 0 auto; }
   @media (max-width: 960px) { .app { grid-template-columns: 1fr; } }
 
   .card {
@@ -91,7 +91,7 @@
   .poke-option .poke-title { font-weight: 800; font-size: 0.85rem; }
   .poke-option .poke-type { font-size: 0.7rem; background: #eee; padding: 2px 6px; border-radius: 4px; }
 
-  /* ---------- battle scene (Classic Retro Style) ---------- */
+  /* ---------- battle scene ---------- */
   .scene {
     position: relative; height: 320px; border: 4px solid var(--border-retro); border-radius: 16px;
     overflow: hidden; box-shadow: var(--shadow); margin-bottom: 15px;
@@ -112,7 +112,6 @@
   }
   .pal.player .sprite-img { transform: scaleX(-1); }
 
-  /* Visual Juice / Animations */
   .sprite-img.hit { animation: hitFlash 0.4s steps(2, start); }
   @keyframes hitFlash { 0% { opacity: 0; transform: scale(1.1); } 50% { opacity: 1; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
 
@@ -135,7 +134,6 @@
   .bar.danger { background: var(--accent-red); }
   .hp-text { font-size: 0.75rem; text-align: right; font-family: 'Press Start 2P', monospace; }
 
-  /* ---------- action panel ---------- */
   #info { 
     min-height: 2.8em; background: #222; color: #fff; font-family: 'Press Start 2P', monospace; 
     font-size: 0.75rem; line-height: 1.5; border: 3px solid var(--border-retro); border-radius: 10px; padding: 12px; margin-bottom: 12px; 
@@ -152,20 +150,29 @@
   #log { list-style: none; margin: 0; padding: 0; max-height: 140px; overflow-y: auto; font-size: 0.85rem; }
   #log li { padding: 6px 10px; border-bottom: 1px dashed #ddd; margin-bottom: 4px; }
 
-  /* ---------- code peek ---------- */
+  /* ---------- code peek (Redesigned & Clean) ---------- */
   #peek { background: #1e1e2f; color: #f4eefc; border: 4px solid var(--border-retro); border-radius: 16px; padding: 16px; box-shadow: var(--shadow); max-height: calc(100vh - 40px); overflow-y: auto; }
   @media (max-width: 960px) { #peek { position: static; max-height: none; } }
-  #peek h2 { margin: 0 0 8px; font-size: 0.9rem; font-family: 'Press Start 2P', monospace; color: var(--accent-yellow); }
-  #peekConcept { display: inline-block; background: var(--accent-yellow); color: #000; padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.75rem; margin-bottom: 8px; }
-  #peekNote { margin: 0 0 10px; color: #dcd0f0; font-size: 0.85rem; }
+  #peek h2 { margin: 0 0 8px; font-size: 0.9rem; font-family: 'Press Start 2P', monospace; color: var(--accent-yellow); display: flex; align-items: center; justify-content: space-between; }
+  
+  .peek-tabs { display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; }
+  .peek-tab { font-family: inherit; font-size: 0.65rem; padding: 5px 8px; border: 2px solid #555; background: #2b2b3d; color: #ccc; border-radius: 6px; cursor: pointer; font-weight: 800; }
+  .peek-tab.active { background: var(--accent-yellow); color: #000; border-color: var(--accent-yellow); }
+
+  .peek-card-box { background: #161622; border: 2px solid #333; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+  #peekConcept { display: inline-block; background: var(--accent-blue); color: #fff; padding: 3px 8px; border-radius: 4px; font-weight: 800; font-size: 0.7rem; margin-bottom: 6px; }
+  #peekWhatItDoes { font-size: 0.82rem; color: #e2d9f3; margin: 0 0 8px; font-weight: 800; }
+  #peekWhyItMatters { font-size: 0.78rem; color: #bcaedc; margin: 0 0 10px; line-height: 1.4; }
+  
   #peekCode {
-    margin: 0 0 12px; background: #111; border-radius: 8px; padding: 12px; overflow-x: auto;
-    font-family: monospace; font-size: 0.75rem; line-height: 1.4; color: #a6e3a1; white-space: pre;
+    margin: 0; background: #0b0b12; border-radius: 6px; padding: 10px; overflow-x: auto;
+    font-family: monospace; font-size: 0.72rem; line-height: 1.4; color: #a6e3a1; white-space: pre; border: 1px solid #333;
   }
-  #peekHistory { display: flex; flex-wrap: wrap; gap: 6px; }
-  #peekHistory button { font-family: inherit; font-weight: 800; font-size: 0.65rem; border: 2px solid #555; background: #333; color: #fff; border-radius: 6px; padding: 4px 8px; cursor: pointer; }
-  #peekHistory button:hover { background: #555; }
-  .peek-sub { font-size: 0.75rem; color: #b8a9d4; margin: 6px 0; }
+
+  .peek-sub { font-size: 0.72rem; color: #b8a9d4; margin: 8px 0 4px; }
+  #peekHistory { display: flex; flex-wrap: wrap; gap: 5px; }
+  #peekHistory button { font-family: inherit; font-weight: 800; font-size: 0.62rem; border: 2px solid #444; background: #2b2b3d; color: #ddd; border-radius: 5px; padding: 3px 6px; cursor: pointer; }
+  #peekHistory button:hover { background: #444; }
 
   /* ---------- overlay ---------- */
   #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 10; }
@@ -185,7 +192,7 @@
 
 <div class="app">
   <main>
-    <!-- Start screen with form validation -->
+    <!-- Start screen -->
     <section id="startScreen" class="card">
       <div class="hero">🎮🔥</div>
       <h2>Trainer Login</h2>
@@ -254,13 +261,25 @@
     </section>
   </main>
 
-  <!-- Code Peek panel -->
+  <!-- Code Peek panel (Redesigned with tabs & crystal clear explanations) -->
   <aside id="peek">
-    <h2>👀 Code Peek</h2>
-    <span id="peekConcept"></span>
-    <p id="peekNote"></p>
-    <pre id="peekCode"></pre>
-    <div class="peek-sub">Recent concepts (click to look back):</div>
+    <h2>👀 Code Peek <span style="font-size:0.6rem; color:#a6e3a1;">Learn JavaScript</span></h2>
+    <div class="peek-tabs">
+      <button class="peek-tab active" data-filter="all">All</button>
+      <button class="peek-tab" data-filter="basics">Variables</button>
+      <button class="peek-tab" data-filter="events">Events & Forms</button>
+      <button class="peek-tab" data-filter="logic">Game Logic</button>
+      <button class="peek-tab" data-filter="ui">DOM & UI</button>
+    </div>
+
+    <div class="peek-card-box">
+      <span id="peekConcept">Variables</span>
+      <div id="peekWhatItDoes">What this code does: Storing trainer name and team state.</div>
+      <div id="peekWhyItMatters"><strong>Why it matters:</strong> Variables act as labeled storage boxes in computer memory so the game can remember player choices across screens.</div>
+      <pre id="peekCode"></pre>
+    </div>
+
+    <div class="peek-sub">Recently Viewed Concepts (Click to revisit):</div>
     <div id="peekHistory"></div>
   </aside>
 </div>
@@ -346,7 +365,7 @@ let trainerName = "";
 let turn = 1;                
 let busy = false;            
 let selectedMove = null;     
-let chosenStarters = []; // Array to store exactly 3 chosen keys
+let chosenStarters = []; 
 const playerTeam = [];       
 const enemyTeam = [];        
 const battleLog = [];        
@@ -427,82 +446,166 @@ const pals = {
   }
 };
 
-// Complete CodePeek Snippets Database
+// Redesigned CodePeek Database with Crystal Clear Explanations & Categories
 const snippets = {
-  variables: `let trainerName = "";
+  variables: {
+    category: "basics",
+    concept: "Variables & State",
+    what: "Creating storage containers for player data and team rosters.",
+    why: "Variables act like labeled filing folders in computer memory so the game can remember your name, current turn, and chosen Pokémon across different screens.",
+    code: `let trainerName = "";
 let chosenStarters = [];
-const playerTeam = [];`,
-  form: `form.addEventListener("submit", (e) => {
+const playerTeam = [];`
+  },
+  form: {
+    category: "events",
+    concept: "Form Validation & Events",
+    what: "Intercepting form submission to check input requirements.",
+    why: "preventDefault() stops the browser from reloading the page. We check if the password is at least 8 characters before letting the trainer enter.",
+    code: `form.addEventListener("submit", (e) => {
   e.preventDefault();
   if (nameInput.value && passInput.value.length >= 8) {
     showRulesScreen();
   }
-});`,
-  selection: `if (chosenStarters.includes(key)) {
-  // remove if already chosen
+});`
+  },
+  selection: {
+    category: "logic",
+    concept: "Arrays & Toggle Logic",
+    what: "Adding or removing Pokémon when clicking selection cards.",
+    why: "Includes() checks if a Pokémon is already picked. If yes, we filter it out (deselect). If no and under 3, we push it into our chosen team array.",
+    code: `if (chosenStarters.includes(key)) {
+  chosenStarters = chosenStarters.filter(k => k !== key);
 } else if (chosenStarters.length < 3) {
-  // add to team
-}`,
-  click: `button.addEventListener("click", () => {
+  chosenStarters.push(key);
+}`
+  },
+  click: {
+    category: "events",
+    concept: "Click Event Listeners",
+    what: "Listening for user clicks on battle move buttons.",
+    why: "Every time you click a move, the browser fires this event listener, triggering our sound synthesizer and starting your turn.",
+    code: `button.addEventListener("click", () => {
   playSound('click');
   playerTurn(move);
-});`,
-  hover: `button.addEventListener("mouseover", () => {
-  info.textContent = move.name + ":" + desc;
-});`,
-  moves: `creature.moves.forEach((move) => {
+});`
+  },
+  hover: {
+    category: "ui",
+    concept: "Mouseover Event & Tooltips",
+    what: "Displaying move power and accuracy when hovering over buttons.",
+    why: "Hover events give players instant feedback without cluttering the main screen, improving user experience.",
+    code: `button.addEventListener("mouseover", () => {
+  info.textContent = move.name + ": " + desc;
+});`
+  },
+  moves: {
+    category: "ui",
+    concept: "Dynamic DOM Generation",
+    what: "Looping through creature moves to build buttons on the fly.",
+    why: "Instead of hardcoding HTML for every Pokémon's unique attacks, JavaScript dynamically generates the correct buttons based on who is fighting.",
+    code: `creature.moves.forEach((move) => {
   const btn = document.createElement("button");
   btn.textContent = move.name;
-});`,
-  timeout: `busy = true;
-setTimeout(enemyTurn, 1200);`,
-  faint: `team.shift();
+});`
+  },
+  timeout: {
+    category: "logic",
+    concept: "Asynchronous Timers",
+    what: "Pausing briefly before the opponent takes its turn.",
+    why: "setTimeout() creates a natural 1.2-second delay so players can read the battle log before the computer attacks back.",
+    code: `busy = true;
+setTimeout(enemyTurn, 1200);`
+  },
+  faint: {
+    category: "logic",
+    concept: "Array Shift & Team Rotation",
+    what: "Removing fainted Pokémon and bringing out the next team member.",
+    why: "Array.shift() removes the first item in the list, making the next Pokémon in your team line up automatically as your active combatant.",
+    code: `team.shift();
 if (team.length === 0) {
   endGame();
-}`,
-  log: `battleLog.push(text);
+}`
+  },
+  log: {
+    category: "ui",
+    concept: "DOM Manipulation & Scrolling",
+    what: "Appending battle actions to the scrolling battle log.",
+    why: "Pushing text to an array and creating list items (<li>) gives players a historical record of everything that happened in the battle.",
+    code: `battleLog.push(text);
 const li = document.createElement("li");
 li.textContent = text;
-logBox.appendChild(li);`,
-  hpbar: `const percent = (hp / maxHp) * 100;
-bar.style.width = percent + "%";`,
-  cheer: `let bonus = turn % 3 === 0 ? 3 : 0;`,
-  team: `for (const pal of playerTeam) {
-  // render sprite thumbnail
-}`
+logBox.appendChild(li);`
+  },
+  hpbar: {
+    category: "ui",
+    concept: "Percentage Calculations",
+    what: "Calculating and updating health bar widths dynamically.",
+    why: "We compute (current HP / max HP) * 100 to get a CSS percentage, and switch bar colors from green to yellow to red as health drops.",
+    code: `const percent = (hp / maxHp) * 100;
+bar.style.width = percent + "%";`
+  }
 };
 
 function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function showPeek(entry) {
+let activeSnippetKey = "variables";
+
+function showPeek(key) {
+  const entry = snippets[key];
+  if (!entry) return;
+  activeSnippetKey = key;
+  
   document.getElementById("peekConcept").textContent = entry.concept;
-  document.getElementById("peekNote").textContent = entry.note;
+  document.getElementById("peekWhatItDoes").textContent = "What this code does: " + entry.what;
+  document.getElementById("peekWhyItMatters").innerHTML = "<strong>Why it matters:</strong> " + entry.why;
   document.getElementById("peekCode").innerHTML = escapeHtml(entry.code);
+  
+  // Track in history
+  if (!peekHistory.includes(key)) {
+    peekHistory.push(key);
+    if (peekHistory.length > 6) peekHistory.shift();
+    renderPeekHistory();
+  }
 }
 
 function renderPeekHistory() {
   const box = document.getElementById("peekHistory");
   box.innerHTML = "";
-  for (const entry of peekHistory) {
+  for (const k of peekHistory) {
+    const entry = snippets[k];
     const chip = document.createElement("button");
     chip.textContent = entry.concept;
-    chip.addEventListener("click", () => showPeek(entry));
+    chip.addEventListener("click", () => showPeek(k));
     box.append(chip);
   }
 }
 
-function peek(concept, code, note, focus) {
-  for (let i = 0; i < peekHistory.length; i++) {
-    if (peekHistory[i].concept === concept) { peekHistory.splice(i, 1); break; }
+function peek(key, focus) {
+  showPeek(key);
+  if (focus) {
+    document.getElementById("peek").classList.remove("hidden");
   }
-  const entry = { concept: concept, code: code, note: note };
-  peekHistory.push(entry);
-  if (peekHistory.length > 8) { peekHistory.shift(); }
-  if (focus) { showPeek(entry); }
-  renderPeekHistory();
 }
+
+// Tab filtering
+document.querySelectorAll(".peek-tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".peek-tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    const filter = tab.dataset.filter;
+    
+    // Find first matching snippet for this filter
+    for (const [k, v] of Object.entries(snippets)) {
+      if (filter === "all" || v.category === filter) {
+        showPeek(k);
+        break;
+      }
+    }
+  });
+});
 
 function createCreature(template, owner) {
   return {
@@ -549,7 +652,7 @@ function addLog(text) {
   li.textContent = text;
   logBox.appendChild(li);
   logBox.scrollTop = logBox.scrollHeight;
-  peek("Arrays + createElement", snippets.log, "push() adds to array. createElement builds the <li> in memory.", false);
+  peek("log", false);
 }
 
 function setCard(side, creature) {
@@ -567,7 +670,7 @@ function setCard(side, creature) {
   const bar = document.getElementById(side + "Bar");
   bar.style.width = percent + "%";
   bar.className = percent > 50 ? "bar good" : percent > 20 ? "bar warn" : "bar danger";
-  peek("Operators + if/else", snippets.hpbar, "Dynamic bar width calculation with color changes based on HP percentage.", false);
+  peek("hpbar", false);
 }
 
 function renderTeam(side, team) {
@@ -579,7 +682,6 @@ function renderTeam(side, team) {
     img.className = "team-thumb";
     dotsContainer.append(img);
   }
-  peek("Loops: for...of", snippets.team, "for...of loops through each pal in team array.", false);
 }
 
 function updateUI() {
@@ -613,15 +715,16 @@ function renderMoves() {
     
     btn.addEventListener("click", () => {
       playSound('click');
+      peek("click", false);
       playerTurn(move);
     });
     btn.addEventListener("mouseover", () => { 
       info.textContent = move.name + ": " + desc; 
-      peek("Events: mouseover", snippets.hover, "mouseover event listener updates info box.", false);
+      peek("hover", false);
     });
     movesBox.append(btn);
   });
-  peek("Loops: forEach", snippets.moves, "forEach generates move buttons dynamically.", false);
+  peek("moves", false);
 }
 
 function useMove(attacker, defender, move, bonus) {
@@ -652,12 +755,10 @@ function playerTurn(move) {
   busy = true;
   selectedMove = move;
   setButtons(true);
-  peek("Events: click", snippets.click, "Click event handler triggers player's turn.", false);
 
   let bonus = turn % 3 === 0 ? 3 : 0;
   if (bonus > 0) { 
     addLog("📣 " + trainerName + " cheers! +3 power!"); 
-    peek("Operators: % remainder", snippets.cheer, "turn % 3 === 0 triggers cheer bonus.", false);
   }
 
   useMove(playerTeam[0], enemyTeam[0], move, bonus);
@@ -667,7 +768,7 @@ function playerTurn(move) {
     handleFaint("enemy");
   } else {
     setTimeout(enemyTurn, 1200);
-    peek("Async: setTimeout", snippets.timeout, "setTimeout creates a non-blocking asynchronous timer.", false);
+    peek("timeout", false);
   }
 }
 
@@ -693,7 +794,7 @@ function handleFaint(side) {
   addLog(displayName(fainted) + " fainted! 😵");
   document.getElementById(side + "Sprite").classList.add("faint");
   playSound('faint');
-  peek("Arrays: shift & length", snippets.faint, "shift() removes fainted pal from array.", false);
+  peek("faint", false);
 
   setTimeout(() => {
     team.shift();
@@ -743,11 +844,9 @@ function initSelectScreen() {
     div.addEventListener("click", () => {
       playSound('click');
       if (chosenStarters.includes(key)) {
-        // Remove if already picked
         chosenStarters = chosenStarters.filter(k => k !== key);
         div.classList.remove("selected");
       } else if (chosenStarters.length < 3) {
-        // Add if under 3
         chosenStarters.push(key);
         div.classList.add("selected");
       }
@@ -760,10 +859,11 @@ function initSelectScreen() {
         confirmBtn.disabled = true;
         confirmBtn.style.background = "var(--accent-blue)";
       }
+      peek("selection", false);
     });
     grid.append(div);
   });
-  peek("Objects & Arrays", snippets.selection, "Includes() and push/filter methods manage team selection.", false);
+  peek("selection", false);
 }
 
 function startBattle() {
@@ -771,12 +871,10 @@ function startBattle() {
   enemyTeam.length = 0;
   battleLog.length = 0;
 
-  // Push all 3 user-chosen Pokémon into player team
   chosenStarters.forEach(key => {
     playerTeam.push(createCreature(pals[key], "player"));
   });
 
-  // Assign enemy team from remaining unchosen or default pool
   const unchosen = Object.keys(pals).filter(k => !chosenStarters.includes(k));
   const enemyKeys = [...unchosen, "charmander", "squirtle", "bulbasaur"].slice(0, 3);
   for (const key of enemyKeys) {
@@ -823,7 +921,7 @@ form.addEventListener("submit", function (event) {
     document.getElementById("startScreen").classList.add("hidden");
     document.getElementById("rulesScreen").classList.remove("hidden");
   }
-  peek("Form validation", snippets.form, "preventDefault() stops submission to validate inputs.", false);
+  peek("form", false);
 });
 
 document.getElementById("toSelectBtn").addEventListener("click", () => {
@@ -852,7 +950,8 @@ document.getElementById("peekToggle").addEventListener("click", () => {
   document.getElementById("peek").classList.toggle("hidden");
 });
 
-peek("Variables & data types", snippets.variables, "Welcome! CodePeek tracks all JavaScript actions as you play.", true);
+// Initialize with variables peek
+peek("variables", true);
 </script>
 </body>
 </html>
