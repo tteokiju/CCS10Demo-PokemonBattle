@@ -34,7 +34,7 @@
     padding: 10px 20px; max-width: 1240px; margin: 0 auto 15px; background: #fff;
     border: 4px solid var(--border-retro); border-radius: 12px; box-shadow: var(--shadow);
   }
-  header.top h1 { margin: 0; font-size: 1.2rem; font-family: 'Press Start 2P', monospace; color: var(--accent-blue); }
+  header.top h1 { margin: 0; font-size: 1.1rem; font-family: 'Press Start 2P', monospace; color: var(--accent-blue); }
   .trainer-tag { font-size: 0.9rem; background: var(--accent-yellow); padding: 6px 12px; border: 2px solid var(--border-retro); border-radius: 8px; }
 
   .btn {
@@ -54,7 +54,7 @@
     background: var(--panel-bg); border: 4px solid var(--border-retro); border-radius: 16px;
     padding: 20px; box-shadow: var(--shadow); margin-bottom: 15px;
   }
-  .card h2, .card h3 { margin: 0 0 12px; font-family: 'Press Start 2P', monospace; font-size: 0.95rem; color: #333; }
+  .card h2, .card h3 { margin: 0 0 12px; font-family: 'Press Start 2P', monospace; font-size: 0.9rem; color: #333; }
 
   /* ---------- start screen ---------- */
   #startScreen { text-align: center; max-width: 480px; margin: 40px auto; }
@@ -67,19 +67,29 @@
   }
   .error { min-height: 1.4em; color: var(--accent-red); font-size: 0.85rem; margin: 8px 0; font-weight: 800; }
 
+  /* ---------- rules screen ---------- */
+  #rulesScreen { text-align: left; max-width: 580px; margin: 20px auto; }
+  #rulesScreen ul { margin: 10px 0 20px 20px; line-height: 1.6; font-size: 0.9rem; }
+  #rulesScreen li { margin-bottom: 8px; }
+
   /* ---------- select screen ---------- */
-  #selectScreen { text-align: center; max-width: 580px; margin: 20px auto; }
-  .poke-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 16px 0; }
+  #selectScreen { text-align: center; max-width: 620px; margin: 20px auto; }
+  .poke-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 16px 0; }
   .poke-option {
-    background: #fff; border: 3px solid var(--border-retro); border-radius: 12px; padding: 12px;
+    background: #fff; border: 3px solid var(--border-retro); border-radius: 12px; padding: 10px;
     cursor: pointer; box-shadow: var(--shadow); transition: transform 0.1s, background 0.1s;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative;
   }
   .poke-option:hover { transform: translateY(-3px); background: #e0f7fa; }
-  .poke-option.selected { border-color: var(--accent-blue); background: #b3e5fc; transform: translateY(-3px); }
-  .poke-option .poke-img { width: 72px; height: 72px; image-rendering: pixelated; }
-  .poke-option .poke-title { font-weight: 800; font-size: 0.9rem; }
-  .poke-option .poke-type { font-size: 0.75rem; background: #eee; padding: 2px 6px; border-radius: 4px; }
+  .poke-option.selected { border-color: var(--accent-red); background: #ffebee; transform: translateY(-3px); }
+  .poke-badge {
+    position: absolute; top: 6px; right: 6px; background: var(--accent-red); color: #fff;
+    font-size: 0.65rem; font-family: 'Press Start 2P'; padding: 2px 5px; border-radius: 4px; display: none;
+  }
+  .poke-option.selected .poke-badge { display: block; }
+  .poke-option .poke-img { width: 64px; height: 64px; image-rendering: pixelated; }
+  .poke-option .poke-title { font-weight: 800; font-size: 0.85rem; }
+  .poke-option .poke-type { font-size: 0.7rem; background: #eee; padding: 2px 6px; border-radius: 4px; }
 
   /* ---------- battle scene (Classic Retro Style) ---------- */
   .scene {
@@ -190,12 +200,26 @@
       </form>
     </section>
 
+    <!-- Rules & Mechanics screen -->
+    <section id="rulesScreen" class="card hidden">
+      <h2>📜 Rules & Mechanics</h2>
+      <ul>
+        <li><strong>Team Building:</strong> You must select exactly <strong>3 Pokémon</strong> to form your battle team.</li>
+        <li><strong>Turn-Based Combat:</strong> You and your opponent take turns using elemental attacks or healing moves.</li>
+        <li><strong>Type Advantages:</strong> Fire beats Grass, Grass beats Water, Water beats Fire! Type multipliers deal extra damage.</li>
+        <li><strong>Trainer Cheers:</strong> Every 3rd turn, your trainer cheers you on, granting +3 bonus damage!</li>
+        <li><strong>Victory Condition:</strong> Defeat all 3 opposing Pokémon to win the championship!</li>
+      </ul>
+      <button id="toSelectBtn" class="btn" style="width: 100%;">Proceed to Team Selection 🚀</button>
+    </section>
+
     <!-- Select screen -->
     <section id="selectScreen" class="card hidden">
-      <h2>Choose Your Starter Pokémon!</h2>
-      <p style="font-size: 0.85rem; color: #666;">Select your primary combatant for battle:</p>
+      <h2>Build Your Team (Pick 3)</h2>
+      <p id="selectStatus" style="font-size: 0.85rem; color: var(--accent-red); font-weight: 800;">Selected: 0 / 3</p>
       <div class="poke-grid" id="pokeGrid"></div>
-      <button id="confirmSelectBtn" class="btn" style="width: 100%; margin-top: 10px;">Start Battle! 🚀</button>
+      <p id="selectError" class="error"></p>
+      <button id="confirmSelectBtn" class="btn" style="width: 100%; margin-top: 10px;" disabled>Start Battle! 🚀</button>
     </section>
 
     <!-- Battle screen -->
@@ -325,7 +349,7 @@ let trainerName = "";
 let turn = 1;                
 let busy = false;            
 let selectedMove = null;     
-let chosenStarterKey = "charmander"; 
+let chosenStarters = []; // Array to store exactly 3 chosen keys
 const playerTeam = [];       
 const enemyTeam = [];        
 const battleLog = [];        
@@ -342,7 +366,7 @@ const typeChart = {
 
 const typeEmoji = { fire: "🔥", water: "💧", grass: "🌿", electric: "⚡", ice: "❄️", normal: "⭐" };
 
-// Pokémon Data with Official Sprite PNG URLs (Using official PokeAPI pixel sprites)
+// Pokémon Data with Official Sprite PNG URLs
 const pals = {
   charmander: { 
     name: "Charmander", 
@@ -409,17 +433,19 @@ const pals = {
 // Complete CodePeek Snippets Database
 const snippets = {
   variables: `let trainerName = "";
-let chosenStarterKey = "charmander";
+let chosenStarters = [];
 const playerTeam = [];`,
   form: `form.addEventListener("submit", (e) => {
   e.preventDefault();
   if (nameInput.value && passInput.value.length >= 8) {
-    showSelectionScreen();
+    showRulesScreen();
   }
 });`,
-  selection: `Object.keys(pals).forEach(key => {
-  // dynamically generate selection buttons
-});`,
+  selection: `if (chosenStarters.includes(key)) {
+  // remove if already chosen
+} else if (chosenStarters.length < 3) {
+  // add to team
+}`,
   click: `button.addEventListener("click", () => {
   playSound('click');
   playerTurn(move);
@@ -556,7 +582,7 @@ function renderTeam(side, team) {
     img.className = "team-thumb";
     dotsContainer.append(img);
   }
-  peek("Loops: for...of", snippets.team, "for...of loops through each pal in the team array.", false);
+  peek("Loops: for...of", snippets.team, "for...of loops through each pal in team array.", false);
 }
 
 function updateUI() {
@@ -594,7 +620,7 @@ function renderMoves() {
     });
     btn.addEventListener("mouseover", () => { 
       info.textContent = move.name + ": " + desc; 
-      peek("Events: mouseover", snippets.hover, "mouseover event listener updates the info box.", false);
+      peek("Events: mouseover", snippets.hover, "mouseover event listener updates info box.", false);
     });
     movesBox.append(btn);
   });
@@ -629,7 +655,7 @@ function playerTurn(move) {
   busy = true;
   selectedMove = move;
   setButtons(true);
-  peek("Events: click", snippets.click, "Click event handler triggers the player's turn.", false);
+  peek("Events: click", snippets.click, "Click event handler triggers player's turn.", false);
 
   let bonus = turn % 3 === 0 ? 3 : 0;
   if (bonus > 0) { 
@@ -670,7 +696,7 @@ function handleFaint(side) {
   addLog(displayName(fainted) + " fainted! 😵");
   document.getElementById(side + "Sprite").classList.add("faint");
   playSound('faint');
-  peek("Arrays: shift & length", snippets.faint, "shift() removes the fainted pal from the array.", false);
+  peek("Arrays: shift & length", snippets.faint, "shift() removes fainted pal from array.", false);
 
   setTimeout(() => {
     team.shift();
@@ -703,26 +729,44 @@ function endGame(playerWon) {
 
 function initSelectScreen() {
   const grid = document.getElementById("pokeGrid");
+  const statusEl = document.getElementById("selectStatus");
+  const confirmBtn = document.getElementById("confirmSelectBtn");
   grid.innerHTML = "";
   
   Object.keys(pals).forEach((key) => {
     const pal = pals[key];
     const div = document.createElement("div");
-    div.className = "poke-option" + (key === chosenStarterKey ? " selected" : "");
+    div.className = "poke-option" + (chosenStarters.includes(key) ? " selected" : "");
     div.innerHTML = `
+      <div class="poke-badge">PICKED</div>
       <img class="poke-img" src="${pal.spriteFront}" alt="${pal.name}">
       <div class="poke-title">${pal.name}</div>
       <div class="poke-type">${typeEmoji[pal.type]} ${pal.type}</div>
     `;
     div.addEventListener("click", () => {
       playSound('click');
-      document.querySelectorAll(".poke-option").forEach(el => el.classList.remove("selected"));
-      div.classList.add("selected");
-      chosenStarterKey = key;
+      if (chosenStarters.includes(key)) {
+        // Remove if already picked
+        chosenStarters = chosenStarters.filter(k => k !== key);
+        div.classList.remove("selected");
+      } else if (chosenStarters.length < 3) {
+        // Add if under 3
+        chosenStarters.push(key);
+        div.classList.add("selected");
+      }
+      
+      statusEl.textContent = `Selected: ${chosenStarters.length} / 3`;
+      if (chosenStarters.length === 3) {
+        confirmBtn.disabled = false;
+        confirmBtn.style.background = "var(--accent-green)";
+      } else {
+        confirmBtn.disabled = true;
+        confirmBtn.style.background = "var(--accent-blue)";
+      }
     });
     grid.append(div);
   });
-  peek("Objects & Arrays", snippets.selection, "Object.keys() and forEach populate the selection options.", false);
+  peek("Objects & Arrays", snippets.selection, "Includes() and push/filter methods manage team selection.", false);
 }
 
 function startBattle() {
@@ -730,12 +774,15 @@ function startBattle() {
   enemyTeam.length = 0;
   battleLog.length = 0;
 
-  playerTeam.push(createCreature(pals[chosenStarterKey], "player"));
-  const otherKeys = Object.keys(pals).filter(k => k !== chosenStarterKey);
-  playerTeam.push(createCreature(pals[otherKeys[0]], "player"));
-  playerTeam.push(createCreature(pals[otherKeys[1]], "player"));
+  // Push all 3 user-chosen Pokémon into player team
+  chosenStarters.forEach(key => {
+    playerTeam.push(createCreature(pals[key], "player"));
+  });
 
-  for (const key of ["squirtle", "bulbasaur", "pikachu"]) {
+  // Assign enemy team from remaining unchosen or default pool
+  const unchosen = Object.keys(pals).filter(k => !chosenStarters.includes(k));
+  const enemyKeys = [...unchosen, "charmander", "squirtle", "bulbasaur"].slice(0, 3);
+  for (const key of enemyKeys) {
     enemyTeam.push(createCreature(pals[key], "enemy"));
   }
 
@@ -777,10 +824,16 @@ form.addEventListener("submit", function (event) {
     formError.textContent = "";
     trainerName = nameInput.value.trim();
     document.getElementById("startScreen").classList.add("hidden");
-    initSelectScreen();
-    document.getElementById("selectScreen").classList.remove("hidden");
+    document.getElementById("rulesScreen").classList.remove("hidden");
   }
-  peek("Form validation", snippets.form, "preventDefault() stops form submission to validate inputs.", false);
+  peek("Form validation", snippets.form, "preventDefault() stops submission to validate inputs.", false);
+});
+
+document.getElementById("toSelectBtn").addEventListener("click", () => {
+  playSound('click');
+  document.getElementById("rulesScreen").classList.add("hidden");
+  initSelectScreen();
+  document.getElementById("selectScreen").classList.remove("hidden");
 });
 
 document.getElementById("confirmSelectBtn").addEventListener("click", () => {
@@ -790,6 +843,7 @@ document.getElementById("confirmSelectBtn").addEventListener("click", () => {
 
 document.getElementById("againBtn").addEventListener("click", () => {
   playSound('click');
+  chosenStarters = [];
   document.getElementById("overlay").classList.add("hidden");
   document.getElementById("battleScreen").classList.add("hidden");
   document.getElementById("startScreen").classList.remove("hidden");
